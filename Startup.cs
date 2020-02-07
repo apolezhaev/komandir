@@ -37,7 +37,7 @@ namespace Komandir
 
             services.AddSpaStaticFiles(spa =>
             {
-                spa.RootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "public");
+                spa.RootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "build");
             });
 
             var token = Configuration.GetSection("Token");
