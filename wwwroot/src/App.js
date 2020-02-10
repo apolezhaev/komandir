@@ -1,25 +1,23 @@
 import React from 'react';
 import './App.css';
-import LeftPane from './components/LeftPane';
-import CenterPane from './components/CenterPane';
 import NotFound from './components/NotFound';
 import { BrowserRouter, Switch, Route } from 'react-router-dom';
+import MiniDrawer from './components/MiniDrawer';
 
 
 function App() {
-  return (
+  return (    
     <BrowserRouter>
-      <div class="layout">         
+      <>         
         <Switch>
-          <Route path="/about">
-            <LeftPane/>
-            <CenterPane />
+          <Route path="/komandir">
+            <MiniDrawer/>            
           </Route>
           <Route path="*">
             <NotFound/>
           </Route>
         </Switch>
-      </div>
+      </>
     </BrowserRouter>
   );
 }
