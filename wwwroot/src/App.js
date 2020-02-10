@@ -2,13 +2,25 @@ import React from 'react';
 import './App.css';
 import LeftPane from './components/LeftPane';
 import CenterPane from './components/CenterPane';
+import NotFound from './components/NotFound';
+import { BrowserRouter, Switch, Route } from 'react-router-dom';
+
 
 function App() {
   return (
-    <div class="layout">     
-      <LeftPane/>
-      <CenterPane/>      
-    </div>
+    <BrowserRouter>
+      <div class="layout">         
+        <Switch>
+          <Route path="/about">
+            <LeftPane/>
+            <CenterPane />
+          </Route>
+          <Route path="*">
+            <NotFound/>
+          </Route>
+        </Switch>
+      </div>
+    </BrowserRouter>
   );
 }
 
