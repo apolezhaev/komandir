@@ -1,9 +1,14 @@
 import React from 'react';
+import Button from 'react-bootstrap/Button';
+import Alert from 'react-bootstrap/Alert';
 
 function CenterPane() {
     return (
       <div class="center-pane">
-          Center Pane
+          <Alert variant="success">
+            Успешно.
+          </Alert>
+          <Button>Привет, мир</Button>
       </div>
     );
 }
