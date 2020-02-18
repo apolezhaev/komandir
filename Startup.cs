@@ -15,17 +15,22 @@ using Microsoft.IdentityModel.Tokens;
 using System.Text;
 using Komandir.Models;
 using Komandir.Services;
-using Microsoft.Extensions.FileProviders;
 using System.IO;
 using Microsoft.AspNetCore.Http;
+using Komandir.Data;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Sqlite;
+using Hosting = Microsoft.AspNetCore.Hosting;
 
 namespace Komandir
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
+        private Hosting.IWebHostEnvironment _environment;
+        public Startup(IConfiguration configuration, Hosting.IWebHostEnvironment environment)
         {
             Configuration = configuration;
+            _environment = environment;
         }
 
         public IConfiguration Configuration { get; }
@@ -33,6 +38,12 @@ namespace Komandir
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)   
         {
+            //var connectionString = Path.Combine(_environment.ContentRootPath, 
+            //    Configuration.GetConnectionString("DefaultConnection").Replace("~", string.Empty));
+
+            var connectionString = Configuration.GetConnectionString("DefaultConnection");
+            services.AddDbContext<KomandirDbContext>(db => db.UseSqlite(connectionString));
+
             services.AddControllers();
 
             services.AddSpaStaticFiles(spa =>
@@ -40,7 +51,7 @@ namespace Komandir
                 spa.RootPath = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "build");
             });
 
-            var token = Configuration.GetSection("Token");
+            var token = Configuration.GetSection("Token");            
             services.Configure<Token>(token); // due to this we can inject config section as IOptions<Type>          
 
             services.AddAuthentication(auth =>

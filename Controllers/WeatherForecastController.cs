@@ -7,12 +7,19 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Komandir.Models;
+using Komandir.Data;
 
 namespace Komandir.Controllers
 {
     [ApiController]   
     public class WeatherForecastController : ControllerBase
     {
+        private KomandirDbContext _db;
+        public WeatherForecastController(KomandirDbContext db)
+        {
+            _db = db;
+        }
+
         private static readonly string[] Summaries = new[]
         {
             "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"

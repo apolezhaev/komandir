@@ -21,7 +21,7 @@ namespace Komandir.Controllers
 
         [AllowAnonymous]
         [HttpPost, Route("login")]
-        public IActionResult login([FromBody]TokenRequest request)
+        public IActionResult Login([FromBody]TokenRequest request)
         {
             if (!ModelState.IsValid)           
                 return BadRequest(ModelState);  
