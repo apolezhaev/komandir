@@ -21,16 +21,16 @@ using Komandir.Data;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Sqlite;
 using Hosting = Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 
 namespace Komandir
 {
     public class Startup
     {
         private Hosting.IWebHostEnvironment _environment;
-        public Startup(IConfiguration configuration, Hosting.IWebHostEnvironment environment)
+        public Startup(IConfiguration configuration)
         {
-            Configuration = configuration;
-            _environment = environment;
+            Configuration = configuration;         
         }
 
         public IConfiguration Configuration { get; }
@@ -38,9 +38,6 @@ namespace Komandir
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)   
         {
-            //var connectionString = Path.Combine(_environment.ContentRootPath, 
-            //    Configuration.GetConnectionString("DefaultConnection").Replace("~", string.Empty));
-
             var connectionString = Configuration.GetConnectionString("DefaultConnection");
             services.AddDbContext<KomandirDbContext>(db => db.UseSqlite(connectionString));
 
@@ -110,6 +107,10 @@ namespace Komandir
             app.UseSpa(spa => 
             {
                 spa.Options.SourcePath = "wwwroot";
+                if (env.IsDevelopment())
+                {
+                    spa.UseReactDevelopmentServer("start");
+                }
             });  
         }
     }
