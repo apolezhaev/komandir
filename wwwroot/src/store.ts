@@ -1,4 +1,8 @@
-import { createStore } from "redux";
-import reducers from "./reducers/index";
+import { createStore, combineReducers } from "redux";
+import reducersContentTypes from "./reducers/contentTypes";
 
-export default createStore(reducers);
+export default createStore(
+  combineReducers({
+    contentTypes: reducersContentTypes
+  })
+);
