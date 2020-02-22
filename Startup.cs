@@ -66,7 +66,7 @@ namespace Komandir
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero // no tolerance when token expired, 5 minutes by default
+                    ClockSkew = TimeSpan.Zero // no tolerance when token expired (5 minutes by default)
                 };
             });
 
@@ -80,12 +80,6 @@ namespace Komandir
             {
                 app.UseDeveloperExceptionPage();
             }
-
-            //app.UseFileServer(new FileServerOptions
-            //{
-            //    FileProvider = new PhysicalFileProvider(Path.Combine(Directory.GetCurrentDirectory(), "wwwroot", "public")),                  
-            //    EnableDefaultFiles = true
-            //});            
 
             app.UseStaticFiles();
             app.UseSpaStaticFiles(); 

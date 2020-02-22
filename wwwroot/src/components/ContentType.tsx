@@ -10,7 +10,7 @@ class ContentType extends React.Component<any, IContentTypesState> {
   };
 
   save_click = () => {
-    this.props.save();
+    this.props.save(this.props.input);
   };
 
   render() {
@@ -25,7 +25,22 @@ class ContentType extends React.Component<any, IContentTypesState> {
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  save: () => dispatch(action(ADD_CONTENT_TYPE)),
+  save: (name: string) => {
+    fetch("http://localhost:5000/api/ContentTypes", {
+      method: "POST",
+      body: JSON.stringify({ name }),
+      headers: {
+        "Content-Type": "application/json"
+      }
+    })
+      .then(r => r.json())
+      .then(
+        data => {
+          dispatch(action(ADD_CONTENT_TYPE, data));
+        },
+        e => console.error(e)
+      );
+  },
   change: (payload: string) => dispatch(action(CHANGE_NAME, payload))
 });
 
