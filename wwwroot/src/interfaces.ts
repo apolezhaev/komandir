@@ -1,6 +1,7 @@
 export interface IContentType {
   contentTypeID?: Number;
   name?: string;
+  description?: string;
 }
 
 export interface IAction {

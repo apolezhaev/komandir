@@ -13,9 +13,30 @@ class ContentType extends React.Component<any, IContentTypesState> {
     this.props.save(this.props.input);
   };
 
+  componentDidMount() {
+    const ID = this.props.match.params.ID;
+    if (ID && ID > 0) {
+      fetch(`http://localhost:5000/api/ContentTypes/${ID}`, {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(r => r.json())
+        .then(
+          data => {
+            console.log(data);
+          },
+          e => console.error(e)
+        );
+    }
+  }
+
   render() {
+    const ID = this.props.match.params.ID;
     return (
       <>
+        Editing content type #{ID}:
+        <br />
         <input type="text" onChange={e => this.name_change(e.target.value)} />
         <br />
         <button onClick={this.save_click}>Save</button>

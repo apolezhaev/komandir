@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import { action, LOAD, DELETE } from "../actions/contentTypes";
@@ -13,33 +13,32 @@ class ContentTypes extends React.Component<any, IContentTypesState> {
   }
   render() {
     return (
-      <>
-        <a href="/komandir/contentTypes/new">Create new</a>
+      <Suspense fallback={<div>Loading...</div>}>
+        <a href="/komandir/contentTypes/0">Create new</a>
         <ul>
-          {this.props.contentTypes && this.props.contentTypes.length
-            ? this.props.contentTypes.map(
-                (contentType: IContentType, i: Number) => {
-                  return (
-                    <li key={`contentType${i}`}>
-                      <a
-                        href={`/komandir/contentTypes/${contentType.contentTypeID}`}
-                      >
-                        {contentType.name}
-                      </a>
-                      <button
-                        onClick={() =>
-                          this.delete_click(contentType.contentTypeID as Number)
-                        }
-                      >
-                        delete
-                      </button>
-                    </li>
-                  );
-                }
-              )
-            : "No content types yet."}
+          {this.props.contentTypes &&
+            this.props.contentTypes.map(
+              (contentType: IContentType, i: Number) => {
+                return (
+                  <li key={`contentType${i}`}>
+                    <a
+                      href={`/komandir/contentTypes/${contentType.contentTypeID}`}
+                    >
+                      {contentType.name}
+                    </a>
+                    <button
+                      onClick={() =>
+                        this.delete_click(contentType.contentTypeID as Number)
+                      }
+                    >
+                      delete
+                    </button>
+                  </li>
+                );
+              }
+            )}
         </ul>
-      </>
+      </Suspense>
     );
   }
 }

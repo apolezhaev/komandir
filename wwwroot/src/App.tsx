@@ -5,23 +5,17 @@ import ContentTypes from "./components/ContentTypes";
 import NotFound from "./components/NotFound";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
 
-function App() {
+const App = () => {
   return (
     <BrowserRouter>
       {/* <MiniDrawer/> */}
       <Switch>
-        <Route path="/komandir/contentTypes/new">
-          <ContentType />
-        </Route>
-        <Route path="/komandir/contentTypes">
-          <ContentTypes />
-        </Route>
-        <Route path="*">
-          <NotFound />
-        </Route>
+        <Route path="/komandir/contentTypes/:ID" component={ContentType} />
+        <Route path="/komandir/contentTypes" component={ContentTypes} />
+        <Route path="*" component={NotFound} />
       </Switch>
     </BrowserRouter>
   );
-}
+};
 
 export default App;
