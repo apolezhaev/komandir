@@ -37,6 +37,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
       .then(
         data => {
           dispatch(action(ADD_CONTENT_TYPE, data));
+          if (data.contentTypeID) {
+            window.location.assign("/komandir/contentTypes");
+          }
         },
         e => console.error(e)
       );

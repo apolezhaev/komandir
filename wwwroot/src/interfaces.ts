@@ -1,5 +1,5 @@
 export interface IContentType {
-  ID?: Number;
+  contentTypeID?: Number;
   name?: string;
 }
 

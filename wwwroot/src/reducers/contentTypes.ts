@@ -4,7 +4,12 @@ import {
   IContentTypesState,
   IReducer
 } from "../interfaces";
-import { ADD_CONTENT_TYPE, CHANGE_NAME, LOAD } from "../actions/contentTypes";
+import {
+  ADD_CONTENT_TYPE,
+  CHANGE_NAME,
+  LOAD,
+  DELETE
+} from "../actions/contentTypes";
 
 const INITIAL_STATE: IContentTypesState = {
   contentTypes: new Array<IContentType>(),
@@ -19,14 +24,14 @@ reducers[ADD_CONTENT_TYPE] = (state: IContentTypesState, action: IAction) => {
       ...state.contentTypes,
       { ID: new Date().getMilliseconds(), name: state.input }
     ],
-    input: state.input
+    input: ""
   };
 };
 
 reducers[LOAD] = (state: IContentTypesState, action: IAction) => {
   return {
     contentTypes: [...state.contentTypes, ...action.payload],
-    input: action.payload
+    input: ""
   };
 };
 
@@ -34,6 +39,18 @@ reducers[CHANGE_NAME] = (state: IContentTypesState, action: IAction) => {
   return {
     contentTypes: [...state.contentTypes],
     input: action.payload
+  };
+};
+
+reducers[DELETE] = (state: IContentTypesState, action: IAction) => {
+  return {
+    contentTypes: [
+      ...state.contentTypes.filter(
+        (contentType: IContentType) =>
+          contentType.contentTypeID !== action.payload
+      )
+    ],
+    input: ""
   };
 };
 
