@@ -1,71 +1,70 @@
 import React from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
-import { action, ADD_CONTENT_TYPE, CHANGE_NAME } from "../actions/contentTypes";
-import { IContentTypesState } from "../interfaces";
+import { 
+  action, 
+  CONTENT_TYPE_SAVE, 
+  CONTENT_TYPE_LOAD, 
+  CONTENT_TYPE_ERROR,
+  CONTENT_TYPE_EDIT } from "../actions/contentTypes";
+import { IContentTypesState, IContentType } from "../interfaces";
 
 class ContentType extends React.Component<any, IContentTypesState> {
-  name_change = (value: string) => {
-    this.props.change(value);
-  };
-
-  save_click = () => {
-    this.props.save(this.props.input);
-  };
-
-  componentDidMount() {
-    const ID = this.props.match.params.ID;
-    if (ID && ID > 0) {
-      fetch(`http://localhost:5000/api/ContentTypes/${ID}`, {
-        headers: {
-          "Content-Type": "application/json"
-        }
-      })
-        .then(r => r.json())
-        .then(
-          data => {
-            console.log(data);
-          },
-          e => console.error(e)
-        );
-    }
+  componentDidMount() {  
+    this.props.load(this.props.match.params.ID);    
   }
-
   render() {
-    const ID = this.props.match.params.ID;
+    const { contentTypeID, name } = this.props.current || { contentTypeID: 0, name: "" };
     return (
       <>
-        Editing content type #{ID}:
+        {this.props.error != null
+          ? <div className="error">Ошибка: {this.props.error}</div> 
+          : ""}
+        Editing content type #{contentTypeID}:
         <br />
-        <input type="text" onChange={e => this.name_change(e.target.value)} />
+        <input type="text" value={name || ""} onChange={e => this.props.edit(e.target.value)} />
         <br />
-        <button onClick={this.save_click}>Save</button>
+        <button onClick={() => this.props.save(this.props.current)}>Save</button>
       </>
     );
   }
 }
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-  save: (name: string) => {
-    fetch("http://localhost:5000/api/ContentTypes", {
-      method: "POST",
-      body: JSON.stringify({ name }),
+  load: (ID: Number) => {    
+    if (ID && ID > 0) {
+      fetch(`http://localhost:5000/api/ContentTypes/${ID}`, {
+        headers: {
+          "Content-Type": "application/json"
+        }
+      })
+        .then(response => response.json())
+        .then(response => dispatch(action(CONTENT_TYPE_LOAD, response)))
+        .catch(exc => dispatch(action(CONTENT_TYPE_ERROR, exc)));
+    }
+  },
+  save: (contentType: IContentType) => {
+    const contentTypeID = contentType.contentTypeID as Number;   
+    fetch(contentTypeID > 0 
+      ? `http://localhost:5000/api/ContentTypes/${contentTypeID}` 
+      : "http://localhost:5000/api/ContentTypes", {
+      method: contentTypeID > 0 ? "PUT" : "POST",
+      body: JSON.stringify(contentType),
       headers: {
         "Content-Type": "application/json"
       }
     })
-      .then(r => r.json())
+      .then(response => response.json())
       .then(
-        data => {
-          dispatch(action(ADD_CONTENT_TYPE, data));
-          if (data.contentTypeID) {
+        response => {
+          dispatch(action(CONTENT_TYPE_SAVE, response));
+          if (response.contentTypeID) {
             window.location.assign("/komandir/contentTypes");
           }
-        },
-        e => console.error(e)
-      );
+        })
+      .catch(exc => dispatch(action(CONTENT_TYPE_ERROR, exc)));
   },
-  change: (payload: string) => dispatch(action(CHANGE_NAME, payload))
+  edit: (payload: string) => dispatch(action(CONTENT_TYPE_EDIT, payload))
 });
 
 const mapStateToProps = (state: IContentTypesState) => state.contentTypes;

@@ -46,7 +46,7 @@ namespace Komandir.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutContentType(int id, ContentType contentType)
+        public async Task<ActionResult<ContentType>> PutContentType(int id, ContentType contentType)
         {
             if (id != contentType.ContentTypeID)
             {
@@ -66,8 +66,8 @@ namespace Komandir.Controllers
 
                 return NotFound();
             }
-
-            return NoContent();
+            
+            return contentType;
         }
 
         // POST: api/ContentTypes

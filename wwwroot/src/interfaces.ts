@@ -12,7 +12,7 @@ export interface IAction {
 export interface IContentTypesState {
   error?: string;
   contentTypes: Array<IContentType>;
-  input?: string;
+  current?: IContentType; 
 }
 
 export interface IReducer {

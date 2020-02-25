@@ -5,44 +5,43 @@ import {
   IReducer
 } from "../interfaces";
 import {
-  ADD_CONTENT_TYPE,
-  CHANGE_NAME,
-  LOAD,
-  DELETE
+  CONTENT_TYPE_SAVE,
+  CONTENT_TYPE_EDIT,
+  CONTENT_TYPE_LOAD,
+  CONTENT_TYPE_LIST_LOAD,
+  CONTENT_TYPE_DELETE,
+  CONTENT_TYPE_ERROR
 } from "../actions/contentTypes";
 
 const INITIAL_STATE: IContentTypesState = {
   contentTypes: new Array<IContentType>(),
-  input: undefined
+  current: undefined 
 };
 
 const reducers: { [action: string]: IReducer } = {};
 
-reducers[ADD_CONTENT_TYPE] = (state: IContentTypesState, action: IAction) => {
-  return {
-    contentTypes: [
-      ...state.contentTypes,
-      { ID: new Date().getMilliseconds(), name: state.input }
-    ],
-    input: ""
-  };
-};
-
-reducers[LOAD] = (state: IContentTypesState, action: IAction) => {
-  return {
-    contentTypes: [...state.contentTypes, ...action.payload],
-    input: ""
-  };
-};
-
-reducers[CHANGE_NAME] = (state: IContentTypesState, action: IAction) => {
+reducers[CONTENT_TYPE_SAVE] = (state: IContentTypesState, action: IAction) => {
   return {
     contentTypes: [...state.contentTypes],
-    input: action.payload
+    current: {...state.current }
   };
 };
 
-reducers[DELETE] = (state: IContentTypesState, action: IAction) => {
+reducers[CONTENT_TYPE_LIST_LOAD] = (state: IContentTypesState, action: IAction) => {
+  return {
+    contentTypes: [...state.contentTypes, ...action.payload],
+    current: {...state.current }
+  };
+};
+
+reducers[CONTENT_TYPE_EDIT] = (state: IContentTypesState, action: IAction) => { 
+  return {
+    contentTypes: [...state.contentTypes],
+    current: {...state.current, name: action.payload}  
+  };
+};
+
+reducers[CONTENT_TYPE_DELETE] = (state: IContentTypesState, action: IAction) => {
   return {
     contentTypes: [
       ...state.contentTypes.filter(
@@ -50,7 +49,22 @@ reducers[DELETE] = (state: IContentTypesState, action: IAction) => {
           contentType.contentTypeID !== action.payload
       )
     ],
-    input: ""
+    current: {...state.current }
+  };
+};
+
+reducers[CONTENT_TYPE_LOAD] = (state: IContentTypesState, action: IAction) => {
+  return {
+    contentTypes: [...state.contentTypes],
+    current: action.payload
+  };
+};
+
+reducers[CONTENT_TYPE_ERROR] = (state: IContentTypesState, action: IAction) => {
+  return {
+    contentTypes: [...state.contentTypes],
+    current: {...state.current },
+    error: action.payload?.message
   };
 };
 
