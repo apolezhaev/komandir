@@ -1,6 +1,8 @@
 import React from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
+import Button from '@material-ui/core/Button';
+import TextField from '@material-ui/core/TextField';
 import { 
   action, 
   CONTENT_TYPE_SAVE, 
@@ -14,17 +16,17 @@ class ContentType extends React.Component<any, IContentTypesState> {
     this.props.load(this.props.match.params.ID);    
   }
   render() {
-    const { contentTypeID, name } = this.props.current || { contentTypeID: 0, name: "" };
+    const { name } = this.props.current || { name: "" };
     return (
       <>
         {this.props.error != null
           ? <div className="error">Ошибка: {this.props.error}</div> 
-          : ""}
-        Editing content type #{contentTypeID}:
-        <br />
-        <input type="text" value={name || ""} onChange={e => this.props.edit(e.target.value)} />
-        <br />
-        <button onClick={() => this.props.save(this.props.current)}>Save</button>
+          : ""}        
+        <TextField id="outlined-basic" margin="dense" label="Content type name" variant="outlined" 
+          value={name || ""} onChange={e => this.props.edit(e.target.value)}  />       
+        <br />        
+        <Button variant="contained" color="primary" onClick={() => this.props.save(this.props.current)}>Save</Button>
+        <Button href="/komandir/contentTypes">Cancel</Button>
       </>
     );
   }
