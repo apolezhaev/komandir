@@ -12,9 +12,14 @@ export interface IAction {
 export interface IContentTypesState {
   error?: string;
   contentTypes: Array<IContentType>;
-  current?: IContentType; 
+  current?: IContentType;
 }
 
 export interface IReducer {
   (state: IContentTypesState, action: IAction): IContentTypesState;
+}
+
+export interface IConfirmProps {
+  title: string;
+  message: string;
 }
