@@ -9,17 +9,27 @@ export interface IAction {
   payload: any;
 }
 
-export interface IContentTypesState {
+export interface IState {
+}
+
+export interface IContentTypesState extends IState {
   error?: string;
   contentTypes: Array<IContentType>;
   current?: IContentType;
+  deleting: false;
 }
 
 export interface IReducer {
-  (state: IContentTypesState, action: IAction): IContentTypesState;
+  (state: IState, action: IAction): IState;
 }
 
-export interface IConfirmProps {
-  title: string;
-  message: string;
+export interface IConfirmProps {  
+  visible: boolean;
+  title: string; 
+  onClose?(confirmed: boolean): void;  
+}
+
+export interface IAppState
+{
+    contentTypes?: IContentTypesState;
 }

@@ -8,34 +8,27 @@ import DialogTitle from "@material-ui/core/DialogTitle";
 import { IConfirmProps } from "../interfaces";
 
 class Confirm extends React.Component<IConfirmProps> {
-  handleClickOpen = () => {
-    //setOpen(true);
-  };
-  handleClose = () => {
-    //setOpen(false);
-  };
   render() {
     return (
       <div>
         <Dialog
-          open={false}
-          onClose={this.handleClose}
+          open={this.props.visible || false}
           aria-labelledby="alert-dialog-title"
           aria-describedby="alert-dialog-description"
         >
           <DialogTitle id="alert-dialog-title">{this.props.title}</DialogTitle>
           <DialogContent>
             <DialogContentText id="alert-dialog-description">
-              {this.props.message}
+              {this.props.children}
             </DialogContentText>
           </DialogContent>
           <DialogActions>
-            <Button onClick={this.handleClose} color="primary">
-              Disagree
+            <Button onClick={() => this.props.onClose && this.props.onClose(true)} color="primary" autoFocus>
+              OK
             </Button>
-            <Button onClick={this.handleClose} color="primary" autoFocus>
-              Agree
-            </Button>
+            <Button onClick={() => this.props.onClose && this.props.onClose(false)} color="primary">
+              Cancel
+            </Button>            
           </DialogActions>
         </Dialog>
       </div>
