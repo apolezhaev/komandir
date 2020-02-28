@@ -3,6 +3,7 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import MaterialUiForm from "./MaterialUiForm";
 import {
   CONTENT_TYPE_SAVE, 
   CONTENT_TYPE_LOAD, 
@@ -13,6 +14,9 @@ import { IContentTypesState, IContentType, IAppState } from "../interfaces";
 class ContentType extends React.Component<any, IContentTypesState> {
   componentDidMount() {  
     this.props.load(this.props.match.params.ID);    
+  } 
+  showResults(values: any) {
+    window.alert(`You submitted:\n\n${JSON.stringify(values, null, 2)}`);
   }
   render() {
     const { name, description } = this.props.current || {};
@@ -29,6 +33,9 @@ class ContentType extends React.Component<any, IContentTypesState> {
         <br />
         <Button variant="contained" color="primary" onClick={() => this.props.save(this.props.current)}>Save</Button>
         <Button href="/komandir/contentTypes">Cancel</Button>
+        <br/>
+        <br/>
+        <MaterialUiForm onSubmit={this.showResults} />
       </>
     );
   }
