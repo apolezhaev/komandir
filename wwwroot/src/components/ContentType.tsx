@@ -3,12 +3,11 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
-import MaterialUiForm from "./MaterialUiForm";
 import {
   CONTENT_TYPE_SAVE, 
   CONTENT_TYPE_LOAD, 
   CONTENT_TYPE_ERROR,
-  CONTENT_TYPE_EDIT } from "../actions/contentTypes";
+  CONTENT_TYPE_FIELD_CHANGED } from "../actions/contentTypes";
 import { IContentTypesState, IContentType, IAppState } from "../interfaces";
 
 class ContentType extends React.Component<any, IContentTypesState> {
@@ -25,17 +24,14 @@ class ContentType extends React.Component<any, IContentTypesState> {
         {this.props.error != null
           ? <div className="error">Ошибка: {this.props.error}</div> 
           : ""}        
-        <TextField id="outlined-basic" margin="dense" label="Content type name" variant="outlined" 
-          value={name || ""} onChange={e => this.props.edit(e.target.value)} />       
+        <TextField id="outlined-basic" margin="dense" inputProps={{ 'data-name': 'name' }} label="Content type name" variant="outlined" 
+          value={name || ""} onChange={e => this.props.edit(e.target)} />       
         <br />
-        <TextField id="outlined-basic" margin="dense" label="Description" variant="outlined" 
-          value={description || ""} />       
+        <TextField id="outlined-basic" margin="dense" inputProps={{ 'data-name': 'description' }} label="Description" variant="outlined" 
+          value={description || ""} onChange={e => this.props.edit(e.target)} />       
         <br />
         <Button variant="contained" color="primary" onClick={() => this.props.save(this.props.current)}>Save</Button>
-        <Button href="/komandir/contentTypes">Cancel</Button>
-        <br/>
-        <br/>
-        <MaterialUiForm onSubmit={this.showResults} />
+        <Button href="/komandir/contentTypes">Cancel</Button>        
       </>
     );
   }
@@ -71,7 +67,14 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
         })
       .catch(error => dispatch({ type: CONTENT_TYPE_ERROR, payload: error}));
   },
-  edit: (payload: string) => dispatch({ type: CONTENT_TYPE_EDIT, payload })
+  edit: (target: HTMLInputElement) => { 
+    let payload: { [name: string] : string; } = {};
+    if (target) {
+      const name = target.getAttribute('data-name') || '';
+      payload[name] = target.value;   
+    }
+    dispatch({ type: CONTENT_TYPE_FIELD_CHANGED, payload }); 
+  }
 });
 
 const mapStateToProps = (state: IAppState) => state.contentTypes;
