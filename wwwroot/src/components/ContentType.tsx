@@ -3,6 +3,7 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
+import Form from "./Form";
 import {
   CONTENT_TYPE_SAVE, 
   CONTENT_TYPE_LOAD, 
@@ -31,7 +32,16 @@ class ContentType extends React.Component<any, IContentTypesState> {
           value={description || ""} onChange={e => this.props.edit(e.target)} />       
         <br />
         <Button variant="contained" color="primary" onClick={() => this.props.save(this.props.current)}>Save</Button>
-        <Button href="/komandir/contentTypes">Cancel</Button>        
+        <Button href="/komandir/contentTypes">Cancel</Button>    
+         <br/> 
+         <br/> 
+        <Form>
+          <div>
+            <TextField id="outlined-basic" margin="dense" inputProps={{ 'data-name': 'name' }} label="Content type name" variant="outlined" 
+              value={name || ""} onChange={e => this.props.edit(e.target)} />   
+            <button>OK</button>
+          </div>
+        </Form>     
       </>
     );
   }

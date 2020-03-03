@@ -80,7 +80,7 @@ class ContentTypes extends React.Component<any, IContentTypesState> {
           onClose={(confirmed: boolean) => this.props.delete(confirmed, this.props.current)}
         >
           <div>You are about to delete this content type.<br/>Continue?</div>
-        </Confirm>        
+        </Confirm>              
       </>
     );
   }
