@@ -4,18 +4,19 @@ import { connect } from "react-redux";
 import Button from '@material-ui/core/Button';
 import Form from "./Form";
 import FormField from "./FormField";
-import {
-  CONTENT_TYPE_SAVE,    
-  CONTENT_TYPE_ERROR,
+import {  
+  FORM_ERROR,
   FORM_LOAD,
-} from "../actions/contentTypes";
-import { IAppState, FormFieldType, IFormState, IFormFieldProps } from "../interfaces";
+} from "../actions";
+import { IAppState, FormFieldType, IFormState, IFormFieldProps, IFormProps } from "../interfaces";
+import { isUndefined } from "util";
 
-class ContentType extends React.Component<any> {
+class ContentType extends React.Component<IFormProps> {
   componentDidMount() {  
-    this.props.load(this.props.match.params.ID);    
-  }   
-  render() {      
+    this.props.load(Number(this.props.match.params.ID));    
+  } 
+  render() {
+    const invalidFields = this.props.fields.filter((field: IFormFieldProps) => !isUndefined(field.error))
     return (
       <>
         {this.props.error != null
@@ -28,7 +29,7 @@ class ContentType extends React.Component<any> {
             <br/>
           </div>)}
           <br/>
-          <Button variant="contained" color="primary" onClick={() => this.props.save(this.props)}>Save</Button> 
+          <Button variant="contained" disabled={false || invalidFields.length > 0} color="primary" onClick={() => this.props.save(this.props)}>Save</Button> 
           <Button href="/komandir/contentTypes">Cancel</Button>          
         </Form>     
       </>
@@ -39,22 +40,47 @@ class ContentType extends React.Component<any> {
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   load: (ID: Number) => {  
     let fields: IFormFieldProps[] = [
-      { name: 'contentTypeID', type: FormFieldType.Hidden, required: true },
-      { name: 'name', type: FormFieldType.Text, required: true, description: 'Content type name' },
-      { name: 'description', type: FormFieldType.Textarea, description: 'Description' }
+      { 
+        name: "contentTypeID", 
+        type: FormFieldType.Hidden, 
+        regex: { 
+          value: "^[0-9]+$", 
+          description: "Numbers only." 
+        } 
+      },
+      { 
+        name: "name", 
+        type: FormFieldType.Text, 
+        regex: { 
+          value: "^[a-zA-Z0-9_]+$", 
+          description: "Alphanumeric symbols and underscore only." 
+        }, 
+        description: "Content type name" 
+      },
+      { 
+        name: "description",
+        type: FormFieldType.Textarea,
+        description: "Description"
+      }
     ];
     if (ID && ID > 0) {
       fetch(`http://localhost:5000/api/ContentTypes/${ID}`, {
         headers: { "Content-Type": "application/json" }
       })
-        .then(response => response.json())
+        .then(response => {
+          if (response.ok)
+            return response.json();
+          throw new Error("Error loading content type.");
+        })
         .then(response => {
           fields.forEach(field => {
             field.value = response[field.name];
           })         
           dispatch({ type: FORM_LOAD, payload: fields })
         })
-        .catch(error => dispatch({ type: CONTENT_TYPE_ERROR, payload: error }));
+        .catch(error => {
+          dispatch({ type: FORM_ERROR, payload: error });
+        });
     } else {
       dispatch({ type: FORM_LOAD, payload: fields });
     }
@@ -72,14 +98,19 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
       body: JSON.stringify(body),
       headers: { "Content-Type": "application/json" }
     })
-      .then(response => response.json())
+      .then(response => {
+        if (response.ok)
+          return response.json();
+        throw new Error("Error saving content type.");
+      })
       .then(
-        response => {
-          dispatch({ type: CONTENT_TYPE_SAVE, payload: response });
+        response => {         
           if (response.contentTypeID)
             window.location.assign("/komandir/contentTypes");
         })
-      .catch(error => dispatch({ type: CONTENT_TYPE_ERROR, payload: error}));
+      .catch(error => {
+        dispatch({ type: FORM_ERROR, payload: error });
+      });
   }
 });
 

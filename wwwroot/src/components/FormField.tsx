@@ -3,7 +3,7 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import TextField from '@material-ui/core/TextField';
 import { IFormFieldProps, FormFieldType, IAppState, IFormState } from "../interfaces";
-import { FORM_CHANGED } from "../actions/contentTypes";
+import { FORM_CHANGED } from "../actions";
 
 class FormField extends React.Component<IFormFieldProps, IFormState> {
 	handlers: { [type: string]: any }	
@@ -19,12 +19,11 @@ class FormField extends React.Component<IFormFieldProps, IFormState> {
 		return <input type="hidden" data-name={name} value={value} />
 	}
 	textareaFor(props: IFormFieldProps): any {    
-		const { name, required, description, onChange, value } = props;
-		const valid = (required !== true) || (value || "").length > 0;
+		const { name, error, description, onChange, value } = props;
 		return <TextField 
 			margin="dense" 
-			error={!valid}
-			helperText={!valid ? `${description || name} is a required field.` : null}
+			error={error !== undefined}
+			helperText={error}
 			variant="outlined"
 			inputProps={{ "data-name": name }}
 			onChange={e => onChange && onChange(e)}
@@ -34,12 +33,11 @@ class FormField extends React.Component<IFormFieldProps, IFormState> {
 			label={description} />  
 	  }
 	textboxFor(props: IFormFieldProps): any {    
-		const { name, required, description, onChange, value } = props;
-		const valid = (required !== true) || (value || "").length > 0;
+		const { name, error, description, onChange, value } = props;		
 		return <TextField 
 			margin="dense" 
-			error={!valid}
-			helperText={!valid ? `${description || name} is a required field.` : null}
+			error={error !== undefined}
+			helperText={error}
 			variant="outlined"
 			inputProps={{ "data-name": name }}
 			onChange={e => onChange && onChange(e)}
