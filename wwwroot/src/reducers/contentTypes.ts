@@ -3,12 +3,10 @@ import {
   IState,
   IContentType,
   IContentTypesState,
-  IReducer
+  IReducer  
 } from "../interfaces";
 import {
   CONTENT_TYPE_SAVE,
-  CONTENT_TYPE_FIELD_CHANGED,
-  CONTENT_TYPE_LOAD,
   CONTENT_TYPE_LIST_LOAD,
   CONTENT_TYPE_DELETE_CONFIRM,
   CONTENT_TYPE_DELETE_CANCEL,
@@ -35,31 +33,11 @@ reducers[CONTENT_TYPE_SAVE] = (state: IState, action: IAction) => {
   };
 };
 
-reducers[CONTENT_TYPE_FIELD_CHANGED] = (state: IState, action: IAction) => { 
-  const contentTypesState = state as IContentTypesState;
-  return {
-    contentTypes: [...contentTypesState.contentTypes],
-    current: {...contentTypesState.current, ...action.payload},
-    error: contentTypesState.error,
-    deleting: contentTypesState.deleting
-  };
-};
-
 reducers[CONTENT_TYPE_LIST_LOAD] = (state: IState, action: IAction) => {
   const contentTypesState = state as IContentTypesState;
   return {
     contentTypes: [...contentTypesState.contentTypes, ...action.payload],
     current: {...contentTypesState.current },
-    error: contentTypesState.error,
-    deleting: contentTypesState.deleting
-  };
-};
-
-reducers[CONTENT_TYPE_LOAD] = (state: IState, action: IAction) => {
-  const contentTypesState = state as IContentTypesState;
-  return {
-    contentTypes: [...contentTypesState.contentTypes],
-    current: {...action.payload },
     error: contentTypesState.error,
     deleting: contentTypesState.deleting
   };
