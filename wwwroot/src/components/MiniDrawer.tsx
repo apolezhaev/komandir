@@ -18,8 +18,6 @@ import ListItemText from '@material-ui/core/ListItemText';
 import InboxIcon from '@material-ui/icons/MoveToInbox';
 import MailIcon from '@material-ui/icons/Mail';
 //import MUIRichTextEditor from 'mui-rte';
-import NotFound from './NotFound';
-import { BrowserRouter, Switch, Route } from "react-router-dom";
 
 const drawerWidth = 240;
 const listItems = [
@@ -54,7 +52,7 @@ const useStyles = makeStyles(theme => ({
   drawer: {
     width: drawerWidth,
     flexShrink: 0,
-    whiteSpace: 'nowrap'    
+    whiteSpace: 'nowrap'
   },
   drawerOpen: {
     width: drawerWidth,
@@ -87,7 +85,7 @@ const useStyles = makeStyles(theme => ({
   },
 }));
 
-function MiniDrawer() {
+function MiniDrawer(props: any) {
   const classes = useStyles();
   const theme = useTheme();
   const [open, setOpen] = React.useState(false);
@@ -149,7 +147,7 @@ function MiniDrawer() {
           {listItems.map((li, index) => (
             <ListItem button key={index}>
               <ListItemIcon><InboxIcon /></ListItemIcon>
-              <ListItemText primary={li.title}  />
+              <ListItemText primary={li.title} />
             </ListItem>
           ))}
         </List>
@@ -162,33 +160,12 @@ function MiniDrawer() {
             </ListItem>
           ))}
         </List>
-        <Divider />        
+        <Divider />
       </Drawer>
       <main className={classes.content}>
         <div className={classes.toolbar} />
-        {/* <MUIRichTextEditor label="Start typing..." /> */}        
-        <BrowserRouter>
-          <>
-            <Switch>
-              <Route path="/komandir">
-                <Typography paragraph>
-                  Consequat mauris nunc congue nisi vitae suscipit. Fringilla est ullamcorper eget nulla
-                  facilisi etiam dignissim diam. Pulvinar elementum integer enim neque volutpat ac
-                  tincidunt. Ornare suspendisse sed nisi lacus sed viverra tellus. Purus sit amet volutpat
-                  consequat mauris. Elementum eu facilisis sed odio morbi. Euismod lacinia at quis risus sed
-                  vulputate odio. Morbi tincidunt ornare massa eget egestas purus viverra accumsan in. In
-                  hendrerit gravida rutrum quisque non tellus orci ac. Pellentesque nec nam aliquam sem et
-                  tortor. Habitant morbi tristique senectus et. Adipiscing elit duis tristique sollicitudin
-                  nibh sit. Ornare aenean euismod elementum nisi quis eleifend. Commodo viverra maecenas
-                  accumsan lacus vel facilisis. Nulla posuere sollicitudin aliquam ultrices sagittis orci a.
-                </Typography>            
-              </Route>
-              <Route path="*">
-                <NotFound/>
-              </Route>
-            </Switch>           
-          </>
-        </BrowserRouter>        
+        {/* <MUIRichTextEditor label="Start typing..." /> */}
+        {props.children}
       </main>
     </div>
   );

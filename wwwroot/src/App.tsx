@@ -1,20 +1,21 @@
 import React from "react";
-//import MiniDrawer from './components/MiniDrawer';
 import ContentType from "./components/ContentType";
 import ContentTypes from "./components/ContentTypes";
 import NotFound from "./components/NotFound";
 import { BrowserRouter, Switch, Route } from "react-router-dom";
+import MiniDrawer from "./components/MiniDrawer";
 
-const App = () => {
+function App() {
   return (
-    <BrowserRouter>
-      {/* <MiniDrawer/> */}
-      <Switch>
-        <Route path="/komandir/contentTypes/:ID" component={ContentType} />
-        <Route path="/komandir/contentTypes" component={ContentTypes} />
-        <Route path="*" component={NotFound} />
-      </Switch>
-    </BrowserRouter>
+    <MiniDrawer>
+      <BrowserRouter>
+        <Switch>
+          <Route path="/komandir/contentTypes/:ID" component={ContentType} />
+          <Route path="/komandir/contentTypes" component={ContentTypes} />
+          <Route path="*" component={NotFound} />
+        </Switch>
+      </BrowserRouter>
+    </MiniDrawer>
   );
 };
 
