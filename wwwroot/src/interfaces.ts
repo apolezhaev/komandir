@@ -23,7 +23,7 @@ export interface IContentTypeListProps extends IContentTypeListState {
 
 export interface IContentTypeListState extends IState {
   error?: string;
-  contentTypes: Array<IContentType>;  
+  contentTypes: Array<IContentType>;
   selection?: IContentType;
 }
 
@@ -31,10 +31,10 @@ export interface IReducer {
   (state: IState, action: IAction): IState;
 }
 
-export interface IConfirmProps {  
+export interface IConfirmProps {
   visible: boolean;
-  title: string; 
-  onClose?(confirmed: boolean): void;  
+  title: string;
+  onClose?(confirmed: boolean): void;
 }
 
 export interface IAppState {
@@ -51,18 +51,18 @@ export enum FormFieldType {
 
 export interface IFormFieldProps {
   name: string,
-  type: FormFieldType,  
-  description?: string 
-  onChange?(e: React.ChangeEvent): void;  
+  type?: FormFieldType,
+  description?: string
+  onChange?(e: React.ChangeEvent): void;
   value?: string;
-  regex?: IRegexProps;   
+  regex?: IRegexProps;
   validationErrorMessage?: string;
   error?: string;
 }
 
 export interface IRegexProps {
   value: string,
-  description?: string 
+  description?: string
 }
 
 export interface IFormParams {
@@ -71,7 +71,7 @@ export interface IFormParams {
 
 export interface IFormProps extends RouteComponentProps<IFormParams> {
   error?: string;
-  fields: IFormFieldProps[],  
+  fields: IFormFieldProps[],
   load(ID: Number): void;
   save(form: IFormState): void;
 }
