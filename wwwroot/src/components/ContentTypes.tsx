@@ -1,7 +1,7 @@
 import React from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
-import {  
+import {
   CONTENT_TYPE_LIST_LOAD,
   CONTENT_TYPE_LIST_DELETE_OK,
   CONTENT_TYPE_LIST_DELETE_CANCEL,
@@ -16,12 +16,12 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
-import Confirm from "./Confirm"; 
+import Confirm from "./Confirm";
 
 class ContentTypes extends React.Component<IContentTypeListProps> {
   componentDidMount() {
     this.props.load();
-  }  
+  }
   render() {
     return (
       <>
@@ -60,7 +60,7 @@ class ContentTypes extends React.Component<IContentTypeListProps> {
                           onClick={() =>
                             this.props.prompt(contentType)
                           }
-                        > 
+                        >
                           del
                         </Button>
                       </TableCell>
@@ -69,14 +69,14 @@ class ContentTypes extends React.Component<IContentTypeListProps> {
                 }
               )}
           </TableBody>
-        </Table>       
+        </Table>
         <Confirm
           title="Confirmation required"
-          visible={this.props.selection != null}                
+          visible={this.props.selection != null}
           onClose={(confirmed: boolean) => this.props.selection && this.props.delete(confirmed, this.props.selection)}
         >
-          <div>You are about to delete this content type.<br/>Continue?</div>
-        </Confirm>              
+          <div>You are about to delete this content type.<br />Continue?</div>
+        </Confirm>
       </>
     );
   }
@@ -84,13 +84,13 @@ class ContentTypes extends React.Component<IContentTypeListProps> {
 
 const mapStateToProps = (state: IAppState) => state.contentTypes;
 
-const mapDispatchToProps = (dispatch: Dispatch) => ({  
+const mapDispatchToProps = (dispatch: Dispatch) => ({
   delete: (confirmed: boolean, contentType: IContentType) => {
     if (confirmed) {
       fetch(`http://localhost:5000/api/ContentTypes/${contentType.contentTypeID}`, {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" }
-        })
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+      })
         .then(response => {
           if (response.ok)
             return response.json();
@@ -103,6 +103,8 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     }
   },
   load: () => {
+    dispatch({ type: CONTENT_TYPE_LIST_LOAD });
+    /*
     fetch("http://localhost:5000/api/ContentTypes")
       .then(response => {
         if (response.ok)
@@ -111,10 +113,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
       })
       .then(response => dispatch({ type: CONTENT_TYPE_LIST_LOAD, payload: response }))
       .catch(error => dispatch({ type: CONTENT_TYPE_LIST_ERROR, payload: error.message }));
+      */
   },
   prompt: (contentType: IContentType) => {
     dispatch({ type: CONTENT_TYPE_LIST_DELETE_PROMPT, payload: contentType })
-  }  
+  }
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContentTypes);
