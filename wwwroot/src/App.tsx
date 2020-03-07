@@ -10,13 +10,21 @@ function App() {
     <MiniDrawer>
       <BrowserRouter>
         <Switch>
-          <Route path="/komandir/contentTypes/:ID" component={ContentType} />
-          <Route path="/komandir/contentTypes" component={ContentTypes} />
+          <Route
+            exact={true}
+            path="/komandir/contentTypes/:ID"
+            component={ContentType}
+          />
+          <Route
+            exact={true}
+            path="/komandir/contentTypes"
+            component={ContentTypes}
+          />
           <Route path="*" component={NotFound} />
         </Switch>
       </BrowserRouter>
     </MiniDrawer>
   );
-};
+}
 
 export default App;

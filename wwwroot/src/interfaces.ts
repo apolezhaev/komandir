@@ -10,25 +10,23 @@ export interface IContentType {
 export interface IAction {
   type: string;
   payload: any;
-}
-
-export interface IState {
+  middleware?: any;
 }
 
 export interface IContentTypeListProps extends IContentTypeListState {
-  load(): void;
+  readList(): void;
   delete(confirmed: boolean, contentType: IContentType): void;
   prompt(contentType: IContentType): void;
 }
 
-export interface IContentTypeListState extends IState {
+export interface IContentTypeListState {
   error?: string;
   contentTypes: Array<IContentType>;
   selection?: IContentType;
 }
 
 export interface IReducer {
-  (state: IState, action: IAction): IState;
+  (state: any, action: IAction): any;
 }
 
 export interface IConfirmProps {
@@ -43,16 +41,16 @@ export interface IAppState {
 }
 
 export enum FormFieldType {
-  Text = 'text',
-  Checkbox = 'checkbox',
-  Textarea = 'textarea',
-  Hidden = 'hidden'
+  Text = "text",
+  Checkbox = "checkbox",
+  Textarea = "textarea",
+  Hidden = "hidden"
 }
 
 export interface IFormFieldProps {
-  name: string,
-  type?: FormFieldType,
-  description?: string
+  name: string;
+  type?: FormFieldType;
+  description?: string;
   onChange?(e: React.ChangeEvent): void;
   value?: string;
   regex?: IRegexProps;
@@ -61,19 +59,21 @@ export interface IFormFieldProps {
 }
 
 export interface IRegexProps {
-  value: string,
-  description?: string
+  value: string;
+  description?: string;
 }
 
 export interface IFormParams {
   ID?: string;
 }
 
+export interface IMiddleware {}
+
 export interface IFormProps extends RouteComponentProps<IFormParams> {
   error?: string;
-  fields: IFormFieldProps[],
-  load(ID: Number): void;
-  save(form: IFormState): void;
+  fields: IFormFieldProps[];
+  read(ID: Number): void;
+  update(form: IFormState): void;
 }
 
 export interface IFormState {
