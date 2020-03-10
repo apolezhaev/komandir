@@ -33,7 +33,7 @@ class ContentType extends React.Component<IContentTypeProps> {
 
           {this.props.contentTypeAttributes.map((attribute: IContentTypeAttributeProps, i: Number) => (
             <div key={`field${i}`}>
-              {attribute.name}
+              <FormField {...attribute} />
             </div>
           ))}
 
