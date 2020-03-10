@@ -41,7 +41,7 @@ export interface IAppState {
 }
 
 export enum AttributeDataType {
-  None = 0,
+  None = 10,
   String = 1,
   Date = 2,
   DateTime = 3,

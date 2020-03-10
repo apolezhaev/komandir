@@ -30,7 +30,7 @@ class FormField extends React.Component<IContentTypeAttributeProps, IContentType
 			multiline={true}
 			rows="4"
 			value={value || ""}
-			label={description} />
+			label={description || name} />
 	}
 	textboxFor(props: IContentTypeAttributeProps): any {
 		const { name, error, description, onChange, value } = props;
@@ -42,7 +42,7 @@ class FormField extends React.Component<IContentTypeAttributeProps, IContentType
 			inputProps={{ "data-name": name }}
 			onChange={e => onChange && onChange(e)}
 			value={value || ""}
-			label={description} />
+			label={description || name} />
 	}
 	render() {
 		const dataType = this.props.dataTypeID || AttributeDataType.String;
