@@ -37,23 +37,28 @@ export interface IConfirmProps {
 
 export interface IAppState {
   contentTypes?: IContentTypeListState;
-  forms?: IFormState;
+  forms?: IContentTypeState;
 }
 
-export enum FormFieldType {
-  Text = "text",
-  Checkbox = "checkbox",
-  Textarea = "textarea",
-  Hidden = "hidden"
+export enum AttributeDataType {
+  None = 0,
+  String = 1,
+  Date = 2,
+  DateTime = 3,
+  Lookup = 4,
+  Number = 5,
+  Text = 6
 }
 
-export interface IFormFieldProps {
+export interface IContentTypeAttributeProps {
+  contentTypeAttributeID: Number;
   name: string;
-  type?: FormFieldType;
+  regex?: IRegexProps;
+  dataTypeID?: AttributeDataType;
+  contentTypeID?: Number;
   description?: string;
   onChange?(e: React.ChangeEvent): void;
   value?: string;
-  regex?: IRegexProps;
   validationErrorMessage?: string;
   error?: string;
 }
@@ -67,16 +72,19 @@ export interface IFormParams {
   ID?: string;
 }
 
-export interface IMiddleware {}
+export interface IMiddleware { }
 
-export interface IFormProps extends RouteComponentProps<IFormParams> {
+export interface IContentTypeProps extends RouteComponentProps<IFormParams> {
   error?: string;
-  fields: IFormFieldProps[];
+  fields: IContentTypeAttributeProps[];
+  contentTypeAttributes: IContentTypeAttributeProps[];
   read(ID: Number): void;
-  update(form: IFormState): void;
+  //readAttrubutes(ID: Number): void;
+  update(form: IContentTypeState): void;
 }
 
-export interface IFormState {
+export interface IContentTypeState {
   error?: string;
-  fields: IFormFieldProps[];
+  fields: IContentTypeAttributeProps[];
+  contentTypeAttributes: IContentTypeAttributeProps[];
 }

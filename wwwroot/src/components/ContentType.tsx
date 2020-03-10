@@ -5,17 +5,19 @@ import Button from "@material-ui/core/Button";
 import Form from "./Form";
 import FormField from "./FormField";
 import middleware from "../middleware/contentType";
-import { IFormFieldProps, IFormProps, IAppState } from "../interfaces";
-import { FORM_LOAD, FORM_SAVE } from "../actions";
+import { IContentTypeProps, IAppState, IContentTypeAttributeProps } from "../interfaces";
+import { FORM_LOAD, FORM_SAVE/*, CONTENT_TYPE_READ_ATTRIBUTES*/ } from "../actions";
 
-class ContentType extends React.Component<IFormProps> {
+class ContentType extends React.Component<IContentTypeProps> {
   componentDidMount() {
-    this.props.read(Number(this.props.match.params.ID));
+    const contentTypeID = Number(this.props.match.params.ID);
+    this.props.read(contentTypeID);
+    //this.props.readAttrubutes(contentTypeID);
   }
   render() {
     const invalid =
       this.props.fields.filter(
-        (field: IFormFieldProps) => field.regex && (field.error || !field.value)
+        (field: IContentTypeAttributeProps) => field.regex && (field.error || !field.value)
       ).length > 0;
     return (
       <>
@@ -28,6 +30,13 @@ class ContentType extends React.Component<IFormProps> {
               <FormField {...field} />
             </div>
           ))}
+
+          {this.props.contentTypeAttributes.map((attribute: IContentTypeAttributeProps, i: Number) => (
+            <div key={`field${i}`}>
+              {attribute.name}
+            </div>
+          ))}
+
           <Button
             variant="contained"
             disabled={invalid}
@@ -51,7 +60,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
       payload: ID,
       middleware: middleware.read
     }),
-  update: (props: IFormProps) =>
+  update: (props: IContentTypeProps) =>
     dispatch({
       type: FORM_SAVE,
       payload: props.fields,

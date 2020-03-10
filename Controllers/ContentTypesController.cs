@@ -32,7 +32,9 @@ namespace Komandir.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<ContentType>> GetContentType(int id)
         {
-            var contentType = await _context.ContentTypes.FindAsync(id);
+            var contentType = await _context.ContentTypes
+                .Include(x => x.ContentTypeAttributes)
+                .FirstOrDefaultAsync(x => x.ContentTypeID == id);
 
             if (contentType == null)
             {

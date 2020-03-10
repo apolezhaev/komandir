@@ -1,6 +1,6 @@
 import {
-  FormFieldType,
-  IFormFieldProps,
+  AttributeDataType,
+  IContentTypeAttributeProps,
   IAction,
   IMiddleware
 } from "../interfaces";
@@ -28,7 +28,7 @@ class ContentTypeMiddleware implements IMiddleware {
   update(action: IAction, next: any) {
     const body: any = {};
     const fields = action.payload;
-    fields.forEach((field: IFormFieldProps) => {
+    fields.forEach((field: IContentTypeAttributeProps) => {
       body[field.name] = field.value;
     });
     const contentTypeID = +body.contentTypeID;
@@ -86,12 +86,14 @@ class ContentTypeMiddleware implements IMiddleware {
 
   read(action: IAction, next: any) {
     const contentTypeID = action.payload;
-    let fields: IFormFieldProps[] = [
+    let fields: IContentTypeAttributeProps[] = [
       {
+        contentTypeAttributeID: 0,
         name: "contentTypeID",
-        type: FormFieldType.Hidden
+        dataTypeID: AttributeDataType.None
       },
       {
+        contentTypeAttributeID: 1,
         name: "name",
         regex: {
           value: "^[a-zA-Z0-9]+$",
@@ -100,12 +102,13 @@ class ContentTypeMiddleware implements IMiddleware {
         description: "Name"
       },
       {
+        contentTypeAttributeID: 2,
         name: "description",
-        type: FormFieldType.Textarea,
+        dataTypeID: AttributeDataType.Text,
         description: "Description"
       }
     ];
-    action.payload = fields;
+    action.payload = { fields, contentTypeAttributes: [] };
     if (contentTypeID && contentTypeID > 0) {
       fetch(`http://localhost:5000/api/ContentTypes/${contentTypeID}`, {
         headers: { "Content-Type": "application/json" }
@@ -118,6 +121,7 @@ class ContentTypeMiddleware implements IMiddleware {
           fields.forEach(field => {
             field.value = response[field.name];
           });
+          action.payload.contentTypeAttributes = response.contentTypeAttributes;
           next(action);
         })
         .catch(error => next({ type: FORM_ERROR, payload: error }));

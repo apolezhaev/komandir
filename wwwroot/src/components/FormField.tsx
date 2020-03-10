@@ -2,23 +2,23 @@ import React from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import TextField from '@material-ui/core/TextField';
-import { IFormFieldProps, FormFieldType, IAppState, IFormState } from "../interfaces";
+import { IContentTypeAttributeProps, AttributeDataType, IAppState, IContentTypeState } from "../interfaces";
 import { FORM_CHANGED } from "../actions";
 
-class FormField extends React.Component<IFormFieldProps, IFormState> {
+class FormField extends React.Component<IContentTypeAttributeProps, IContentTypeState> {
 	handlers: { [type: string]: any }
-	constructor(props: IFormFieldProps) {
+	constructor(props: IContentTypeAttributeProps) {
 		super(props);
 		this.handlers = {};
-		this.handlers[FormFieldType.Text] = this.textboxFor;
-		this.handlers[FormFieldType.Hidden] = this.hiddenFor;
-		this.handlers[FormFieldType.Textarea] = this.textareaFor;
+		this.handlers[AttributeDataType.String] = this.textboxFor;
+		this.handlers[AttributeDataType.None] = this.hiddenFor;
+		this.handlers[AttributeDataType.Text] = this.textareaFor;
 	}
-	hiddenFor(props: IFormFieldProps): any {
+	hiddenFor(props: IContentTypeAttributeProps): any {
 		const { name, value } = props;
 		return <input type="hidden" data-name={name} value={value} />
 	}
-	textareaFor(props: IFormFieldProps): any {
+	textareaFor(props: IContentTypeAttributeProps): any {
 		const { name, error, description, onChange, value } = props;
 		return <TextField
 			margin="dense"
@@ -32,7 +32,7 @@ class FormField extends React.Component<IFormFieldProps, IFormState> {
 			value={value || ""}
 			label={description} />
 	}
-	textboxFor(props: IFormFieldProps): any {
+	textboxFor(props: IContentTypeAttributeProps): any {
 		const { name, error, description, onChange, value } = props;
 		return <TextField
 			margin="dense"
@@ -45,8 +45,8 @@ class FormField extends React.Component<IFormFieldProps, IFormState> {
 			label={description} />
 	}
 	render() {
-		const type = this.props.type || FormFieldType.Text;
-		return (this.handlers[type] || this.textboxFor)(this.props);
+		const dataType = this.props.dataTypeID || AttributeDataType.String;
+		return (this.handlers[dataType] || this.textboxFor)(this.props);
 	}
 }
 

@@ -1,23 +1,26 @@
 import React from "react";
-import { IAction, IReducer, IFormState } from "../interfaces";
+import { IAction, IReducer, IContentTypeState } from "../interfaces";
 import { FORM_CHANGED, FORM_LOAD, FORM_ERROR } from "../actions";
 
-const INITIAL_STATE: IFormState = {
-  fields: []
+const INITIAL_STATE: IContentTypeState = {
+  fields: [],
+  contentTypeAttributes: []
 };
 
 const reducers: { [action: string]: IReducer } = {
   [FORM_LOAD]: (state: any, action: IAction) => {
     return {
-      error: (state as IFormState).error,
-      fields: action.payload
+      error: (state as IContentTypeState).error,
+      fields: action.payload.fields,
+      contentTypeAttributes: action.payload.contentTypeAttributes
     };
   },
 
   [FORM_ERROR]: (state: any, action: IAction) => {
     return {
       error: action.payload?.message,
-      fields: [...(state as IFormState).fields]
+      fields: [...(state as IContentTypeState).fields],
+      contentTypeAttributes: [...(state as IContentTypeState).contentTypeAttributes]
     };
   },
 
@@ -25,10 +28,11 @@ const reducers: { [action: string]: IReducer } = {
     const target = (action.payload as React.ChangeEvent).target;
     const name = target.getAttribute("data-name");
     const value = (target as HTMLInputElement).value;
-    let form = originalState as IFormState;
+    let form = originalState as IContentTypeState;
     let state = {
       error: form.error,
-      fields: [...form.fields]
+      fields: [...form.fields],
+      contentTypeAttributes: [...form.contentTypeAttributes]
     };
     form.fields.forEach(field => {
       if (field.name === name) {
@@ -37,8 +41,8 @@ const reducers: { [action: string]: IReducer } = {
           const valid = new RegExp(field.regex.value).test(value);
           field.error = !valid
             ? field.regex.description ||
-              `'${value}' is not a correct value for ${field.description ||
-                name}`
+            `'${value}' is not a correct value for ${field.description ||
+            name}`
             : undefined;
         }
       }
