@@ -85,7 +85,7 @@ class ContentTypeMiddleware implements IMiddleware {
       );
   }
 
-  deleteContentTypeAttribute(action: IAction, next: any) {
+  deleteField(action: IAction, next: any) {
     const { attribute, result } = action.payload;
     if (result === PopupResult.OK) {
       fetch(
@@ -116,13 +116,13 @@ class ContentTypeMiddleware implements IMiddleware {
     const contentTypeID = action.payload;
     let fields: IFieldProps[] = [
       {
-        contentTypeAttributeID: 0,
+        system: true,
         name: "contentTypeID",
         dataTypeID: DataType.None
       },
       {
-        contentTypeAttributeID: 1,
         name: "name",
+        system: true,
         regex: {
           value: "^[a-zA-Z0-9]+$",
           description: "Alphanumeric chars only."
@@ -130,13 +130,13 @@ class ContentTypeMiddleware implements IMiddleware {
         description: "Name"
       },
       {
-        contentTypeAttributeID: 2,
+        system: true,
         name: "description",
         dataTypeID: DataType.Text,
         description: "Description"
       }
     ];
-    action.payload = { fields, contentTypeAttributes: [] };
+    action.payload = { fields };
     if (contentTypeID && contentTypeID > 0) {
       fetch(`http://localhost:5000/api/ContentTypes/${contentTypeID}`, {
         headers: { "Content-Type": "application/json" }
@@ -151,7 +151,8 @@ class ContentTypeMiddleware implements IMiddleware {
           fields.forEach(field => {
             field.value = response[field.name];
           });
-          action.payload.contentTypeAttributes = response.contentTypeAttributes;
+          fields = [...fields, ...response.contentTypeAttributes];
+          action.payload = { fields };
           next(action);
         })
         .catch(error => next({ type: FORM_ERROR, payload: error }));

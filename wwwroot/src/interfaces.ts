@@ -1,7 +1,7 @@
 import { RouteComponentProps } from "react-router-dom";
 
 export interface IContentType {
-  contentTypeID?: Number;
+  contentTypeID?: number;
   name?: string;
   description?: string;
 }
@@ -21,7 +21,7 @@ export interface IContentTypeListProps extends IContentTypeListState {
 export interface IContentTypeListState {
   error?: string;
   contentTypes: Array<IContentType>;
-  selection?: IContentType;
+  current?: IContentType;
 }
 
 export interface IReducer {
@@ -45,16 +45,18 @@ export enum DataType {
 }
 
 export interface IFieldProps {
-  contentTypeAttributeID: Number;
+  contentTypeAttributeID?: number;
   name: string;
   regex?: IRegexProps;
   dataTypeID?: DataType;
-  contentTypeID?: Number;
+  contentTypeID?: number;
   description?: string;
-  onChange?(name: string, value: any): void;
   value?: string;
+  system: boolean;
   validationErrorMessage?: string;
   error?: string;
+  onChange?(name: string, value: any): void;
+  deleting?: boolean;
 }
 
 export interface IRegexProps {
@@ -66,24 +68,23 @@ export interface IFormParams {
   ID?: string;
 }
 
-export interface IMiddleware { }
+export interface IMiddleware {}
 
 export interface IContentTypeProps extends RouteComponentProps<IFormParams> {
   error?: string;
   fields: IFieldProps[];
-  contentTypeAttributes: IFieldProps[];
-  read(ID: Number): void;
-  update(form: IContentTypeState): void;
-  prompt(attribute: IFieldProps): void;
-  selection?: IFieldProps;
-  deleteContentTypeAttribute(result: PopupResult, attribute: IFieldProps): void;
+  read(ID: number): void;
+  update(fields: IFieldProps[]): void;
+  prompt(field: IFieldProps): void;
+  current?: IFieldProps;
+  deleteField(result: PopupResult, field: IFieldProps): void;
+  onChange?(name: string, value: any): void;
 }
 
 export interface IContentTypeState {
   error?: string;
   fields: IFieldProps[];
-  selection?: IFieldProps;
-  contentTypeAttributes: IFieldProps[];
+  current?: IFieldProps;
 }
 
 export enum PopupResult {

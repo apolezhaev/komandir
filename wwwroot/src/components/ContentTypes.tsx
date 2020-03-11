@@ -23,11 +23,10 @@ class ContentTypes extends React.Component<IContentTypeListProps> {
     this.props.readList();
   }
   render() {
+    const { current, error, prompt, contentTypes } = this.props;
     return (
       <>
-        {this.props.error && (
-          <div className="error">Ошибка: {this.props.error}</div>
-        )}
+        {error && <div className="error">Ошибка: {error}</div>}
         <Button
           variant="contained"
           color="primary"
@@ -44,43 +43,36 @@ class ContentTypes extends React.Component<IContentTypeListProps> {
             </TableRow>
           </TableHead>
           <TableBody>
-            {this.props.contentTypes &&
-              this.props.contentTypes.map(
-                (contentType: IContentType, i: Number) => {
-                  return (
-                    <TableRow key={`contentType${i}`}>
-                      <TableCell>
-                        <Link
-                          href={`/komandir/contentTypes/${contentType.contentTypeID}`}
-                        >
-                          {contentType.name}
-                        </Link>
-                      </TableCell>
-                      <TableCell>{contentType.description}</TableCell>
-                      <TableCell align="right">
-                        <Button onClick={() => this.props.prompt(contentType)}>
-                          del
-                        </Button>
-                      </TableCell>
-                    </TableRow>
-                  );
-                }
-              )}
+            {contentTypes &&
+              contentTypes.map((contentType: IContentType, i: Number) => {
+                return (
+                  <TableRow key={`contentType${i}`}>
+                    <TableCell>
+                      <Link
+                        href={`/komandir/contentTypes/${contentType.contentTypeID}`}
+                      >
+                        {contentType.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{contentType.description}</TableCell>
+                    <TableCell align="right">
+                      <Button onClick={() => prompt(contentType)}>del</Button>
+                    </TableCell>
+                  </TableRow>
+                );
+              })}
           </TableBody>
         </Table>
         <Confirm
           title="Confirmation required"
-          visible={this.props.selection != null}
+          visible={current != null}
           onClose={(confirmed: boolean) =>
-            this.props.selection &&
-            this.props.delete(confirmed, this.props.selection)
+            current && this.props.delete(confirmed, current)
           }
         >
-          <div>
-            You are about to delete this content type.
-            <br />
-            Continue?
-          </div>
+          You are about to delete this content type.
+          <br />
+          Continue?
         </Confirm>
       </>
     );
@@ -109,4 +101,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContentTypes); 
+export default connect(mapStateToProps, mapDispatchToProps)(ContentTypes);

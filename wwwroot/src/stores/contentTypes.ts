@@ -58,7 +58,7 @@ const reducers: { [action: string]: IReducer } = {
     const list = state as IContentTypeListState;
     return {
       contentTypes: [...list.contentTypes],
-      selection: { ...action.payload },
+      current: { ...action.payload },
       error: list.error
     };
   }

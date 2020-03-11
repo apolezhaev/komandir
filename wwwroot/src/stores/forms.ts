@@ -4,11 +4,16 @@ import {
   IContentTypeState,
   IFieldProps
 } from "../interfaces";
-import { FORM_CHANGED, FORM_LOAD, FORM_ERROR, CONTENT_TYPE_ATTRIBUTE_DELETE_PROMPT, CONTENT_TYPE_ATTRIBUTE_DELETE } from "../actions";
+import {
+  FORM_CHANGED,
+  FORM_LOAD,
+  FORM_ERROR,
+  CONTENT_TYPE_FIELD_DELETE_PROMPT,
+  CONTENT_TYPE_FIELD_DELETE
+} from "../actions";
 
 const INITIAL_STATE: IContentTypeState = {
-  fields: [],
-  contentTypeAttributes: []
+  fields: []
 };
 
 const reducers: { [action: string]: IReducer } = {
@@ -16,27 +21,24 @@ const reducers: { [action: string]: IReducer } = {
     const { error } = state as IContentTypeState;
     return {
       error: error,
-      fields: action.payload.fields,
-      contentTypeAttributes: action.payload.contentTypeAttributes,
+      fields: action.payload.fields
     };
   },
 
   [FORM_ERROR]: (state: any, action: IAction) => {
-    const { contentTypeAttributes, fields } = state as IContentTypeState;
+    const { fields } = state as IContentTypeState;
     return {
       error: action.payload?.message,
-      fields: [...fields],
-      contentTypeAttributes: [...contentTypeAttributes],
+      fields: [...fields]
     };
   },
 
   [FORM_CHANGED]: (originalState: any, action: IAction) => {
     const { name, value } = action.payload;
-    let { fields, error, contentTypeAttributes } = originalState as IContentTypeState;
+    let { fields, error } = originalState as IContentTypeState;
     let state = {
       error: error,
-      fields: [...fields],
-      contentTypeAttributes: [...contentTypeAttributes],
+      fields: [...fields]
     };
     fields.forEach(field => {
       if (field.name === name) {
@@ -45,7 +47,8 @@ const reducers: { [action: string]: IReducer } = {
           const valid = new RegExp(field.regex.value).test(value);
           field.error = !valid
             ? field.regex.description ||
-            `'${value}' is not a correct value for ${field.description || name}`
+              `'${value}' is not a correct value for ${field.description ||
+                name}`
             : undefined;
         }
       }
@@ -53,29 +56,28 @@ const reducers: { [action: string]: IReducer } = {
     return state;
   },
 
-  [CONTENT_TYPE_ATTRIBUTE_DELETE_PROMPT]: (state: any, action: IAction) => {
-    let { fields, error, contentTypeAttributes } = state as IContentTypeState;
+  [CONTENT_TYPE_FIELD_DELETE_PROMPT]: (state: any, action: IAction) => {
+    let { fields, error } = state as IContentTypeState;
     return {
       error: error,
       fields: [...fields],
-      contentTypeAttributes: [...contentTypeAttributes],
-      selection: action.payload
+      current: action.payload
     };
   },
 
-  [CONTENT_TYPE_ATTRIBUTE_DELETE]: (state: any, action: IAction) => {
-    let { fields, error, contentTypeAttributes } = state as IContentTypeState;
+  [CONTENT_TYPE_FIELD_DELETE]: (state: any, action: IAction) => {
+    let { fields, error } = state as IContentTypeState;
     return {
       error: error,
-      fields: [...fields],
-      contentTypeAttributes: [...contentTypeAttributes.filter(
-        (attribute: IFieldProps) =>
-          attribute.contentTypeAttributeID !== action.payload
-      )],
+      fields: [
+        ...fields.filter(
+          (attribute: IFieldProps) =>
+            attribute.contentTypeAttributeID !== action.payload
+        )
+      ]
     };
   }
-}
-
+};
 
 export function createFormsStore(state: any = INITIAL_STATE, action: IAction) {
   const reducer = reducers[action.type];
