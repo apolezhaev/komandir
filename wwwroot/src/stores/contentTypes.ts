@@ -9,7 +9,7 @@ import {
   CONTENT_TYPE_DELETE_OK,
   CONTENT_TYPE_DELETE_CANCEL,
   CONTENT_TYPE_DELETE_PROMPT,
-  CONTENT_TYPE_LIST_ERROR
+  CONTENT_TYPE_ERROR
 } from "../actions";
 
 const INITIAL_STATE: IContentTypeListState = {
@@ -46,7 +46,7 @@ const reducers: { [action: string]: IReducer } = {
     };
   },
 
-  [CONTENT_TYPE_LIST_ERROR]: (state: any, action: IAction) => {
+  [CONTENT_TYPE_ERROR]: (state: any, action: IAction) => {
     const list = state as IContentTypeListState;
     return {
       contentTypes: [...list.contentTypes],

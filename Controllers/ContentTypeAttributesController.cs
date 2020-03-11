@@ -43,8 +43,6 @@ namespace Komandir.Controllers
         }
 
         // PUT: api/ContentTypeAttributes/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPut("{id}")]
         public async Task<IActionResult> PutContentTypeAttribute(int id, ContentTypeAttribute contentTypeAttribute)
         {
@@ -75,8 +73,6 @@ namespace Komandir.Controllers
         }
 
         // POST: api/ContentTypeAttributes
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
         [HttpPost]
         public async Task<ActionResult<ContentTypeAttribute>> PostContentTypeAttribute(ContentTypeAttribute contentTypeAttribute)
         {

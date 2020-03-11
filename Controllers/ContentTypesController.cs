@@ -14,25 +14,25 @@ namespace Komandir.Controllers
     [ApiController]
     public class ContentTypesController : ControllerBase
     {
-        private readonly KomandirDbContext _context;
+        private readonly KomandirDbContext _db;
 
         public ContentTypesController(KomandirDbContext context)
         {
-            _context = context;
+            _db = context;
         }
 
         // GET: api/ContentTypes
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ContentType>>> GetContentTypes()
         {
-            return await _context.ContentTypes.ToListAsync();
+            return await _db.ContentTypes.ToListAsync();
         }
 
         // GET: api/ContentTypes/5
         [HttpGet("{id}")]
         public async Task<ActionResult<ContentType>> GetContentType(int id)
         {
-            var contentType = await _context.ContentTypes
+            var contentType = await _db.ContentTypes
                 .Include(x => x.ContentTypeAttributes)
                 .FirstOrDefaultAsync(x => x.ContentTypeID == id);
 
@@ -44,9 +44,7 @@ namespace Komandir.Controllers
             return contentType;
         }
 
-        // PUT: api/ContentTypes/5
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        // PUT: api/ContentTypes/5       
         [HttpPut("{id}")]
         public async Task<ActionResult<ContentType>> PutContentType(int id, ContentType contentType)
         {
@@ -55,15 +53,15 @@ namespace Komandir.Controllers
                 return BadRequest();
             }
 
-            _context.Entry(contentType).State = EntityState.Modified;
+            _db.Entry(contentType).State = EntityState.Modified;
 
             try
             {
-                await _context.SaveChangesAsync();
+                await _db.SaveChangesAsync();
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (_context.ContentTypes.Any(e => e.ContentTypeID == id))
+                if (_db.ContentTypes.Any(e => e.ContentTypeID == id))
                     throw;
 
                 return NotFound();
@@ -72,14 +70,12 @@ namespace Komandir.Controllers
             return contentType;
         }
 
-        // POST: api/ContentTypes
-        // To protect from overposting attacks, please enable the specific properties you want to bind to, for
-        // more details see https://aka.ms/RazorPagesCRUD.
+        // POST: api/ContentTypes     
         [HttpPost]
         public async Task<ActionResult<ContentType>> PostContentType(ContentType contentType)
         {
-            _context.ContentTypes.Add(contentType);
-            await _context.SaveChangesAsync();
+            _db.ContentTypes.Add(contentType);
+            await _db.SaveChangesAsync();
 
             return CreatedAtAction("GetContentType", new { id = contentType.ContentTypeID }, contentType);
         }
@@ -88,14 +84,14 @@ namespace Komandir.Controllers
         [HttpDelete("{id}")]
         public async Task<ActionResult<ContentType>> DeleteContentType(int id)
         {
-            var contentType = await _context.ContentTypes.FindAsync(id);
+            var contentType = await _db.ContentTypes.FindAsync(id);
             if (contentType == null)
             {
                 return NotFound();
             }
 
-            _context.ContentTypes.Remove(contentType);
-            await _context.SaveChangesAsync();
+            _db.ContentTypes.Remove(contentType);
+            await _db.SaveChangesAsync();
 
             return contentType;
         }

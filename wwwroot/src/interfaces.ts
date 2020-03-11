@@ -1,4 +1,3 @@
-import React from "react";
 import { RouteComponentProps } from "react-router-dom";
 
 export interface IContentType {
@@ -57,7 +56,7 @@ export interface IContentTypeAttributeProps {
   dataTypeID?: AttributeDataType;
   contentTypeID?: Number;
   description?: string;
-  onChange?(e: React.ChangeEvent): void;
+  onChange?(name: string, value: any): void;
   value?: string;
   validationErrorMessage?: string;
   error?: string;
@@ -79,12 +78,26 @@ export interface IContentTypeProps extends RouteComponentProps<IFormParams> {
   fields: IContentTypeAttributeProps[];
   contentTypeAttributes: IContentTypeAttributeProps[];
   read(ID: Number): void;
-  //readAttrubutes(ID: Number): void;
   update(form: IContentTypeState): void;
+  prompt(attribute: IContentTypeAttributeProps): void;
+  selection?: IContentTypeAttributeProps;
+  deleteContentTypeAttribute(result: PopupResult, attribute: IContentTypeAttributeProps): void;
 }
 
 export interface IContentTypeState {
   error?: string;
   fields: IContentTypeAttributeProps[];
+  selection?: IContentTypeAttributeProps;
   contentTypeAttributes: IContentTypeAttributeProps[];
+}
+
+export enum PopupResult {
+  OK = 1,
+  Cancel = 2
+}
+
+export interface IPopupProps {
+  visible: boolean;
+  title: string;
+  onClose?(result: PopupResult): void;
 }

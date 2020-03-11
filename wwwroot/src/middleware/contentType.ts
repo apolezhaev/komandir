@@ -2,9 +2,10 @@ import {
   AttributeDataType,
   IContentTypeAttributeProps,
   IAction,
-  IMiddleware
+  IMiddleware,
+  PopupResult
 } from "../interfaces";
-import { FORM_ERROR, CONTENT_TYPE_LIST_ERROR } from "../actions";
+import { FORM_ERROR, CONTENT_TYPE_ERROR } from "../actions";
 
 class ContentTypeMiddleware implements IMiddleware {
   readList(action: IAction, next: any) {
@@ -19,7 +20,7 @@ class ContentTypeMiddleware implements IMiddleware {
       })
       .catch(error =>
         next({
-          type: CONTENT_TYPE_LIST_ERROR,
+          type: CONTENT_TYPE_ERROR,
           payload: error.message
         })
       );
@@ -78,10 +79,37 @@ class ContentTypeMiddleware implements IMiddleware {
       })
       .catch(error =>
         next({
-          type: CONTENT_TYPE_LIST_ERROR,
+          type: CONTENT_TYPE_ERROR,
           payload: error.message
         })
       );
+  }
+
+  deleteContentTypeAttribute(action: IAction, next: any) {
+    const { attribute, result } = action.payload;
+    if (result === PopupResult.OK) {
+      fetch(
+        `http://localhost:5000/api/ContentTypeAttributes/${attribute.contentTypeAttributeID}`,
+        {
+          method: "DELETE",
+          headers: { "Content-Type": "application/json" }
+        }
+      )
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Error deleting content type attribute.");
+          }
+          return response.json();
+        })
+        .then(response => {
+          action.payload = response.contentTypeAttributeID;
+          next(action);
+        })
+        .catch(error => next({ type: FORM_ERROR, payload: error }));
+    } else {
+      action.payload = null;
+      next(action);
+    }
   }
 
   read(action: IAction, next: any) {
@@ -114,8 +142,10 @@ class ContentTypeMiddleware implements IMiddleware {
         headers: { "Content-Type": "application/json" }
       })
         .then(response => {
-          if (response.ok) return response.json();
-          throw new Error("Error loading content type.");
+          if (!response.ok) {
+            throw new Error("Error loading content type.");
+          }
+          return response.json();
         })
         .then(response => {
           fields.forEach(field => {

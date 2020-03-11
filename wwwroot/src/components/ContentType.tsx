@@ -5,14 +5,26 @@ import Button from "@material-ui/core/Button";
 import Form from "./Form";
 import FormField from "./FormField";
 import middleware from "../middleware/contentType";
-import { IContentTypeProps, IAppState, IContentTypeAttributeProps } from "../interfaces";
-import { FORM_LOAD, FORM_SAVE/*, CONTENT_TYPE_READ_ATTRIBUTES*/ } from "../actions";
+import {
+  IContentTypeProps,
+  IAppState,
+  IContentTypeAttributeProps,
+  AttributeDataType,
+  PopupResult
+} from "../interfaces";
+import { FORM_LOAD, FORM_SAVE, CONTENT_TYPE_ATTRIBUTE_DELETE_PROMPT, CONTENT_TYPE_ATTRIBUTE_DELETE } from "../actions";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import Link from "@material-ui/core/Link";
+import Popup from "./Popup";
 
 class ContentType extends React.Component<IContentTypeProps> {
   componentDidMount() {
     const contentTypeID = Number(this.props.match.params.ID);
     this.props.read(contentTypeID);
-    //this.props.readAttrubutes(contentTypeID);
   }
   render() {
     const invalid =
@@ -31,11 +43,36 @@ class ContentType extends React.Component<IContentTypeProps> {
             </div>
           ))}
 
-          {this.props.contentTypeAttributes.map((attribute: IContentTypeAttributeProps, i: Number) => (
-            <div key={`field${i}`}>
-              <FormField {...attribute} />
-            </div>
-          ))}
+          <Table size="small">
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Data Type</TableCell>
+                <TableCell></TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {this.props.contentTypeAttributes.map((attribute: IContentTypeAttributeProps, i: Number) => (
+                (
+                  <TableRow key={`contentType${i}`}>
+                    <TableCell>
+                      <Link
+                        href={`#${attribute.contentTypeAttributeID}`}
+                      >
+                        {attribute.name}
+                      </Link>
+                    </TableCell>
+                    <TableCell>{attribute.dataTypeID && AttributeDataType[attribute.dataTypeID]}</TableCell>
+                    <TableCell align="right">
+                      <Button onClick={() => this.props.prompt(attribute)}>
+                        del
+                  </Button>
+                    </TableCell>
+                  </TableRow>
+                )
+              ))}
+            </TableBody>
+          </Table>
 
           <Button
             variant="contained"
@@ -47,6 +84,20 @@ class ContentType extends React.Component<IContentTypeProps> {
           </Button>
           <Button href="/komandir/contentTypes">Cancel</Button>
         </Form>
+
+        <Popup
+          title="Confirmation required"
+          visible={this.props.selection != null}
+          onClose={(result: PopupResult) =>
+            this.props.selection &&
+            this.props.deleteContentTypeAttribute(result, this.props.selection)
+          }
+        >
+          You are about to delete {this.props.selection && this.props.selection.name}.
+          <br />
+          Continue?
+        </Popup>
+
       </>
     );
   }
@@ -65,7 +116,17 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
       type: FORM_SAVE,
       payload: props.fields,
       middleware: middleware.update
-    })
+    }),
+  prompt: (attribute: IContentTypeAttributeProps) => {
+    dispatch({ type: CONTENT_TYPE_ATTRIBUTE_DELETE_PROMPT, payload: attribute });
+  },
+  deleteContentTypeAttribute: (result: PopupResult, attribute: IContentTypeAttributeProps) => {
+    dispatch({
+      type: CONTENT_TYPE_ATTRIBUTE_DELETE,
+      payload: { result, attribute },
+      middleware: middleware.deleteContentTypeAttribute
+    });
+  },
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(ContentType);
