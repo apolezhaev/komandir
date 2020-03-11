@@ -34,7 +34,7 @@ export interface IConfirmProps {
   onClose?(confirmed: boolean): void;
 }
 
-export enum AttributeDataType {
+export enum DataType {
   None = 10,
   String = 1,
   Date = 2,
@@ -44,11 +44,11 @@ export enum AttributeDataType {
   Text = 6
 }
 
-export interface IContentTypeAttributeProps {
+export interface IFieldProps {
   contentTypeAttributeID: Number;
   name: string;
   regex?: IRegexProps;
-  dataTypeID?: AttributeDataType;
+  dataTypeID?: DataType;
   contentTypeID?: Number;
   description?: string;
   onChange?(name: string, value: any): void;
@@ -70,20 +70,20 @@ export interface IMiddleware { }
 
 export interface IContentTypeProps extends RouteComponentProps<IFormParams> {
   error?: string;
-  fields: IContentTypeAttributeProps[];
-  contentTypeAttributes: IContentTypeAttributeProps[];
+  fields: IFieldProps[];
+  contentTypeAttributes: IFieldProps[];
   read(ID: Number): void;
   update(form: IContentTypeState): void;
-  prompt(attribute: IContentTypeAttributeProps): void;
-  selection?: IContentTypeAttributeProps;
-  deleteContentTypeAttribute(result: PopupResult, attribute: IContentTypeAttributeProps): void;
+  prompt(attribute: IFieldProps): void;
+  selection?: IFieldProps;
+  deleteContentTypeAttribute(result: PopupResult, attribute: IFieldProps): void;
 }
 
 export interface IContentTypeState {
   error?: string;
-  fields: IContentTypeAttributeProps[];
-  selection?: IContentTypeAttributeProps;
-  contentTypeAttributes: IContentTypeAttributeProps[];
+  fields: IFieldProps[];
+  selection?: IFieldProps;
+  contentTypeAttributes: IFieldProps[];
 }
 
 export enum PopupResult {

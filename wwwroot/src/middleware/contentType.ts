@@ -1,6 +1,6 @@
 import {
-  AttributeDataType,
-  IContentTypeAttributeProps,
+  DataType,
+  IFieldProps,
   IAction,
   IMiddleware,
   PopupResult
@@ -29,7 +29,7 @@ class ContentTypeMiddleware implements IMiddleware {
   update(action: IAction, next: any) {
     const body: any = {};
     const fields = action.payload;
-    fields.forEach((field: IContentTypeAttributeProps) => {
+    fields.forEach((field: IFieldProps) => {
       body[field.name] = field.value;
     });
     const contentTypeID = +body.contentTypeID;
@@ -114,11 +114,11 @@ class ContentTypeMiddleware implements IMiddleware {
 
   read(action: IAction, next: any) {
     const contentTypeID = action.payload;
-    let fields: IContentTypeAttributeProps[] = [
+    let fields: IFieldProps[] = [
       {
         contentTypeAttributeID: 0,
         name: "contentTypeID",
-        dataTypeID: AttributeDataType.None
+        dataTypeID: DataType.None
       },
       {
         contentTypeAttributeID: 1,
@@ -132,7 +132,7 @@ class ContentTypeMiddleware implements IMiddleware {
       {
         contentTypeAttributeID: 2,
         name: "description",
-        dataTypeID: AttributeDataType.Text,
+        dataTypeID: DataType.Text,
         description: "Description"
       }
     ];

@@ -2,7 +2,7 @@ import {
   IAction,
   IReducer,
   IContentTypeState,
-  IContentTypeAttributeProps
+  IFieldProps
 } from "../interfaces";
 import { FORM_CHANGED, FORM_LOAD, FORM_ERROR, CONTENT_TYPE_ATTRIBUTE_DELETE_PROMPT, CONTENT_TYPE_ATTRIBUTE_DELETE } from "../actions";
 
@@ -45,8 +45,7 @@ const reducers: { [action: string]: IReducer } = {
           const valid = new RegExp(field.regex.value).test(value);
           field.error = !valid
             ? field.regex.description ||
-            `'${value}' is not a correct value for ${field.description ||
-            name}`
+            `'${value}' is not a correct value for ${field.description || name}`
             : undefined;
         }
       }
@@ -70,7 +69,7 @@ const reducers: { [action: string]: IReducer } = {
       error: error,
       fields: [...fields],
       contentTypeAttributes: [...contentTypeAttributes.filter(
-        (attribute: IContentTypeAttributeProps) =>
+        (attribute: IFieldProps) =>
           attribute.contentTypeAttributeID !== action.payload
       )],
     };

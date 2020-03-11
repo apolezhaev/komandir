@@ -3,12 +3,12 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import Form from "./Form";
-import FormField, { datepickerFor } from "./FormField";
+import FormField, { TextboxFor } from "./FormField";
 import middleware from "../middleware/contentType";
 import {
   IContentTypeProps,
-  IContentTypeAttributeProps,
-  AttributeDataType,
+  IFieldProps,
+  DataType,
   PopupResult
 } from "../interfaces";
 import { FORM_LOAD, FORM_SAVE, CONTENT_TYPE_ATTRIBUTE_DELETE_PROMPT, CONTENT_TYPE_ATTRIBUTE_DELETE } from "../actions";
@@ -19,7 +19,6 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Link from "@material-ui/core/Link";
 import Popup from "./Popup";
-import { textboxFor } from "./FormField";
 
 class ContentType extends React.Component<IContentTypeProps> {
   componentDidMount() {
@@ -29,7 +28,7 @@ class ContentType extends React.Component<IContentTypeProps> {
   render() {
     const invalid =
       this.props.fields.filter(
-        (field: IContentTypeAttributeProps) => field.regex && (field.error || !field.value)
+        (field: IFieldProps) => field.regex && (field.error || !field.value)
       ).length > 0;
     const { name, description, regex } = this.props.selection || {};
     return (
@@ -53,7 +52,7 @@ class ContentType extends React.Component<IContentTypeProps> {
               </TableRow>
             </TableHead>
             <TableBody>
-              {this.props.contentTypeAttributes.map((attribute: IContentTypeAttributeProps, i: Number) => (
+              {this.props.contentTypeAttributes.map((attribute: IFieldProps, i: Number) => (
                 (
                   <TableRow key={`contentType${i}`}>
                     <TableCell>
@@ -63,7 +62,7 @@ class ContentType extends React.Component<IContentTypeProps> {
                         {attribute.name}
                       </Link>
                     </TableCell>
-                    <TableCell>{attribute.dataTypeID && AttributeDataType[attribute.dataTypeID]}</TableCell>
+                    <TableCell>{attribute.dataTypeID && DataType[attribute.dataTypeID]}</TableCell>
                     <TableCell align="right">
                       <Button onClick={() => this.props.prompt(attribute)}>
                         del
@@ -109,7 +108,7 @@ class ContentType extends React.Component<IContentTypeProps> {
         >
 
           <Form>
-            {textboxFor({ contentTypeAttributeID: 1, name: "name", dataTypeID: AttributeDataType.String })}
+            <TextboxFor name="name" contentTypeAttributeID={1} />
           </Form>
 
         </Popup>
@@ -133,10 +132,10 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
       payload: props.fields,
       middleware: middleware.update
     }),
-  prompt: (attribute: IContentTypeAttributeProps) => {
+  prompt: (attribute: IFieldProps) => {
     dispatch({ type: CONTENT_TYPE_ATTRIBUTE_DELETE_PROMPT, payload: attribute });
   },
-  deleteContentTypeAttribute: (result: PopupResult, attribute: IContentTypeAttributeProps) => {
+  deleteContentTypeAttribute: (result: PopupResult, attribute: IFieldProps) => {
     dispatch({
       type: CONTENT_TYPE_ATTRIBUTE_DELETE,
       payload: { result, attribute },

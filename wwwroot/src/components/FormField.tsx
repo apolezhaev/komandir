@@ -3,12 +3,12 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import TextField from '@material-ui/core/TextField';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import { IContentTypeAttributeProps, AttributeDataType } from "../interfaces";
+import { IFieldProps, DataType } from "../interfaces";
 import DateFnsUtils from '@date-io/date-fns';
 import { FORM_CHANGED } from "../actions";
 
-export function datepickerFor(props: IContentTypeAttributeProps): any {
-	const { name, error, description, onChange, value } = props;
+export function DatepickerFor(field: IFieldProps) {
+	const { name, error, description, onChange, value } = field;
 	return <MuiPickersUtilsProvider utils={DateFnsUtils}>
 		<KeyboardDatePicker
 			name={name}
@@ -27,13 +27,13 @@ export function datepickerFor(props: IContentTypeAttributeProps): any {
 	</MuiPickersUtilsProvider>
 }
 
-export function hiddenFor(props: IContentTypeAttributeProps): any {
-	const { name, value } = props;
-	return <input type="hidden" data-name={name} value={value} />
+export function HiddenFor(field: IFieldProps) {
+	const { name, value } = field;
+	return <input type="hidden" name={name} value={value} />
 }
 
-export function textareaFor(props: IContentTypeAttributeProps): any {
-	const { name, error, description, onChange, value } = props;
+export function TextareaFor(field: IFieldProps) {
+	const { name, error, description, onChange, value } = field;
 	return <TextField
 		name={name}
 		margin="dense"
@@ -47,8 +47,8 @@ export function textareaFor(props: IContentTypeAttributeProps): any {
 		label={description || name} />
 }
 
-export function textboxFor(props: IContentTypeAttributeProps): any {
-	const { name, error, description, onChange, value } = props;
+export function TextboxFor(field: IFieldProps) {
+	const { name, error, description, onChange, value } = field;
 	return <TextField
 		name={name}
 		margin="dense"
@@ -60,28 +60,28 @@ export function textboxFor(props: IContentTypeAttributeProps): any {
 		label={description || name} />
 }
 
-class FormField extends React.Component<IContentTypeAttributeProps> {
+class FormField extends React.Component<IFieldProps> {
 	handlers: { [type: string]: any }
-	constructor(props: IContentTypeAttributeProps) {
+	constructor(props: IFieldProps) {
 		super(props);
 		this.handlers = {
-			[AttributeDataType.String]: textboxFor,
-			[AttributeDataType.None]: hiddenFor,
-			[AttributeDataType.Text]: textareaFor,
-			[AttributeDataType.DateTime]: datepickerFor
+			[DataType.String]: TextboxFor,
+			[DataType.None]: HiddenFor,
+			[DataType.Text]: TextareaFor,
+			[DataType.DateTime]: DatepickerFor
 		};
 	}
 	render() {
-		const dataType = this.props.dataTypeID || AttributeDataType.String;
-		return (this.handlers[dataType] || textboxFor)(this.props);
+		const dataType = this.props.dataTypeID || DataType.String;
+		return (this.handlers[dataType] || TextboxFor)(this.props);
 	}
 }
 
-const mapStateToProps = (state: any) => state.forms;
+const mapStateToProps = (state: any) => { return { field: state.forms }; }
 const mapDispatchToProps = (dispatch: Dispatch) => ({
 	onChange: (name: string, value: any) => {
 		dispatch({ type: FORM_CHANGED, payload: { name, value } })
 	},
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(FormField);
+export default connect(mapStateToProps, mapDispatchToProps)(FormField); 
