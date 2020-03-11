@@ -3,11 +3,10 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import Form from "./Form";
-import FormField from "./FormField";
+import FormField, { datepickerFor } from "./FormField";
 import middleware from "../middleware/contentType";
 import {
   IContentTypeProps,
-  IAppState,
   IContentTypeAttributeProps,
   AttributeDataType,
   PopupResult
@@ -20,6 +19,7 @@ import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Link from "@material-ui/core/Link";
 import Popup from "./Popup";
+import { textboxFor } from "./FormField";
 
 class ContentType extends React.Component<IContentTypeProps> {
   componentDidMount() {
@@ -31,6 +31,7 @@ class ContentType extends React.Component<IContentTypeProps> {
       this.props.fields.filter(
         (field: IContentTypeAttributeProps) => field.regex && (field.error || !field.value)
       ).length > 0;
+    const { name, description, regex } = this.props.selection || {};
     return (
       <>
         {this.props.error && (
@@ -98,12 +99,27 @@ class ContentType extends React.Component<IContentTypeProps> {
           Continue?
         </Popup>
 
+        <Popup
+          title="Edit attribute..."
+          visible={this.props.selection != null}
+          onClose={(result: PopupResult) =>
+            this.props.selection &&
+            this.props.deleteContentTypeAttribute(result, this.props.selection)
+          }
+        >
+
+          <Form>
+            {textboxFor({ contentTypeAttributeID: 1, name: "name", dataTypeID: AttributeDataType.String })}
+          </Form>
+
+        </Popup>
+
       </>
     );
   }
 }
 
-const mapStateToProps = (state: IAppState) => state.forms;
+const mapStateToProps = (state: any) => state.forms;
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   read: (ID: Number) =>
     dispatch({

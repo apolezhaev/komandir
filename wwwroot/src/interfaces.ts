@@ -34,11 +34,6 @@ export interface IConfirmProps {
   onClose?(confirmed: boolean): void;
 }
 
-export interface IAppState {
-  contentTypes?: IContentTypeListState;
-  forms?: IContentTypeState;
-}
-
 export enum AttributeDataType {
   None = 10,
   String = 1,

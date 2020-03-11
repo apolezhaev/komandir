@@ -7,7 +7,7 @@ import {
   CONTENT_TYPE_DELETE_CANCEL,
   CONTENT_TYPE_DELETE_PROMPT
 } from "../actions";
-import { IContentType, IAppState, IContentTypeListProps } from "../interfaces";
+import { IContentType, IContentTypeListProps } from "../interfaces";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
@@ -87,7 +87,7 @@ class ContentTypes extends React.Component<IContentTypeListProps> {
   }
 }
 
-const mapStateToProps = (state: IAppState) => state.contentTypes;
+const mapStateToProps = (state: any) => state.contentTypes;
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   delete: (confirmed: boolean, contentType: IContentType) => {
@@ -109,4 +109,4 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   }
 });
 
-export default connect(mapStateToProps, mapDispatchToProps)(ContentTypes);
+export default connect(mapStateToProps, mapDispatchToProps)(ContentTypes); 
