@@ -33,8 +33,8 @@ namespace Komandir.Controllers
         public async Task<ActionResult<ContentType>> GetContentType(int id)
         {
             var contentType = await _db.ContentTypes
-                .Include(x => x.ContentTypeAttributes)
-                .FirstOrDefaultAsync(x => x.ContentTypeID == id);
+                .Include(x => x.Fields)
+                .FirstOrDefaultAsync(x => x.ID == id);
 
             if (contentType == null)
             {
@@ -48,7 +48,7 @@ namespace Komandir.Controllers
         [HttpPut("{id}")]
         public async Task<ActionResult<ContentType>> PutContentType(int id, ContentType contentType)
         {
-            if (id != contentType.ContentTypeID)
+            if (id != contentType.ID)
             {
                 return BadRequest();
             }
@@ -61,7 +61,7 @@ namespace Komandir.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (_db.ContentTypes.Any(e => e.ContentTypeID == id))
+                if (_db.ContentTypes.Any(e => e.ID == id))
                     throw;
 
                 return NotFound();
@@ -77,7 +77,7 @@ namespace Komandir.Controllers
             _db.ContentTypes.Add(contentType);
             await _db.SaveChangesAsync();
 
-            return CreatedAtAction("GetContentType", new { id = contentType.ContentTypeID }, contentType);
+            return CreatedAtAction("GetContentType", new { id = contentType.ID }, contentType);
         }
 
         // DELETE: api/ContentTypes/5

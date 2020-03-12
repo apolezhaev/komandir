@@ -49,7 +49,7 @@ class ContentTypes extends React.Component<IContentTypeListProps> {
                   <TableRow key={`contentType${i}`}>
                     <TableCell>
                       <Link
-                        href={`/komandir/contentTypes/${contentType.contentTypeID}`}
+                        href={`/komandir/contentTypes/${contentType.id}`}
                       >
                         {contentType.name}
                       </Link>
@@ -70,9 +70,7 @@ class ContentTypes extends React.Component<IContentTypeListProps> {
             current && this.props.delete(confirmed, current)
           }
         >
-          You are about to delete this content type.
-          <br />
-          Continue?
+          You are about to delete <strong>{current && current.name}</strong>. Continue?
         </Confirm>
       </>
     );

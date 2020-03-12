@@ -2,56 +2,56 @@
 
 namespace Komandir.Migrations
 {
-    public partial class Create : Migration
+    public partial class Schema : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.CreateTable(
-                name: "ContentTypeAttributeEditors",
-                columns: table => new
-                {
-                    ContentTypeAttributeEditorID = table.Column<int>(nullable: false)
-                        .Annotation("Sqlite:Autoincrement", true),
-                    Name = table.Column<string>(nullable: false),
-                    Component = table.Column<string>(nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_ContentTypeAttributeEditors", x => x.ContentTypeAttributeEditorID);
-                });
-
-            migrationBuilder.CreateTable(
                 name: "ContentTypes",
                 columns: table => new
                 {
-                    ContentTypeID = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: false),
                     Description = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContentTypes", x => x.ContentTypeID);
+                    table.PrimaryKey("PK_ContentTypes", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
                 name: "DataTypes",
                 columns: table => new
                 {
-                    DataTypeID = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: false)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_DataTypes", x => x.DataTypeID);
+                    table.PrimaryKey("PK_DataTypes", x => x.ID);
                 });
 
             migrationBuilder.CreateTable(
-                name: "ContentTypeAttributes",
+                name: "FieldEditors",
                 columns: table => new
                 {
-                    ContentTypeAttributeID = table.Column<int>(nullable: false)
+                    ID = table.Column<int>(nullable: false)
+                        .Annotation("Sqlite:Autoincrement", true),
+                    Name = table.Column<string>(nullable: false),
+                    Component = table.Column<string>(nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_FieldEditors", x => x.ID);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Fields",
+                columns: table => new
+                {
+                    ID = table.Column<int>(nullable: false)
                         .Annotation("Sqlite:Autoincrement", true),
                     Name = table.Column<string>(nullable: false),
                     DataTypeID = table.Column<int>(nullable: false),
@@ -59,39 +59,39 @@ namespace Komandir.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_ContentTypeAttributes", x => x.ContentTypeAttributeID);
+                    table.PrimaryKey("PK_Fields", x => x.ID);
                     table.ForeignKey(
-                        name: "FK_ContentTypeAttributes_ContentTypes_ContentTypeID",
+                        name: "FK_Fields_ContentTypes_ContentTypeID",
                         column: x => x.ContentTypeID,
                         principalTable: "ContentTypes",
-                        principalColumn: "ContentTypeID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_ContentTypeAttributes_DataTypes_DataTypeID",
+                        name: "FK_Fields_DataTypes_DataTypeID",
                         column: x => x.DataTypeID,
                         principalTable: "DataTypes",
-                        principalColumn: "DataTypeID",
+                        principalColumn: "ID",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContentTypeAttributes_ContentTypeID",
-                table: "ContentTypeAttributes",
+                name: "IX_Fields_ContentTypeID",
+                table: "Fields",
                 column: "ContentTypeID");
 
             migrationBuilder.CreateIndex(
-                name: "IX_ContentTypeAttributes_DataTypeID",
-                table: "ContentTypeAttributes",
+                name: "IX_Fields_DataTypeID",
+                table: "Fields",
                 column: "DataTypeID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropTable(
-                name: "ContentTypeAttributeEditors");
+                name: "FieldEditors");
 
             migrationBuilder.DropTable(
-                name: "ContentTypeAttributes");
+                name: "Fields");
 
             migrationBuilder.DropTable(
                 name: "ContentTypes");

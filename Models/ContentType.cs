@@ -10,10 +10,10 @@ namespace Komandir.Models
     public class ContentType
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ContentTypeID { get; set; }
+        public int ID { get; set; }
         [Required]
         public string Name { get; set; }
         public string Description { get; set; }
-        public ICollection<ContentTypeAttribute> ContentTypeAttributes { get; set; }
+        public ICollection<Field> Fields { get; set; }
     }
 }

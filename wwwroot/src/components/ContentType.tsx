@@ -71,7 +71,7 @@ class ContentType extends React.Component<IContentTypeProps> {
                 .map((field: IFieldProps, i: Number) => (
                   <TableRow key={`contentType${i}`}>
                     <TableCell>
-                      <Link href={`#${field.contentTypeAttributeID}`}>
+                      <Link href={`#${field.id}`}>
                         {field.name}
                       </Link>
                     </TableCell>
@@ -104,12 +104,11 @@ class ContentType extends React.Component<IContentTypeProps> {
             current && deleteField(result, current)
           }
         >
-          You are about to delete <strong>{current && current.name}</strong>{" "}
-          field and appropriate content in existing objects. Continue?
+          You are about to delete <strong>{current && current.name}</strong> and content related to this field. Continue?
         </Popup>
 
         <Popup
-          title="Edit attribute..."
+          title="Edit Field"
           visible={current != null && current.deleting === true}
           onClose={(result: PopupResult) =>
             current && deleteField(result, current)
@@ -138,16 +137,16 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
       payload: fields,
       middleware: middleware.update
     }),
-  prompt: (attribute: IFieldProps) => {
+  prompt: (field: IFieldProps) => {
     dispatch({
       type: CONTENT_TYPE_FIELD_DELETE_PROMPT,
-      payload: attribute
+      payload: field
     });
   },
-  deleteField: (result: PopupResult, attribute: IFieldProps) => {
+  deleteField: (result: PopupResult, field: IFieldProps) => {
     dispatch({
       type: CONTENT_TYPE_FIELD_DELETE,
-      payload: { result, attribute },
+      payload: { result, field },
       middleware: middleware.deleteField
     });
   },

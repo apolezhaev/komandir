@@ -8,13 +8,14 @@ using System.Threading.Tasks;
 
 namespace Komandir.Models
 {
-    public class ContentTypeAttribute
+    public class Field
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int ContentTypeAttributeID { get; set; }
+        public int ID { get; set; }
         [Required]
         public string Name { get; set; }        
         public int DataTypeID { get; set; }
+        [JsonIgnore]
         public DataType DataType { get; set; }
         public int ContentTypeID { get; set; }
         [JsonIgnore]

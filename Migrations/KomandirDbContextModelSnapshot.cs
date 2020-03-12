@@ -17,7 +17,7 @@ namespace Komandir.Migrations
 
             modelBuilder.Entity("Komandir.Models.ContentType", b =>
                 {
-                    b.Property<int>("ContentTypeID")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -28,14 +28,29 @@ namespace Komandir.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("ContentTypeID");
+                    b.HasKey("ID");
 
                     b.ToTable("ContentTypes");
                 });
 
-            modelBuilder.Entity("Komandir.Models.ContentTypeAttribute", b =>
+            modelBuilder.Entity("Komandir.Models.DataType", b =>
                 {
-                    b.Property<int>("ContentTypeAttributeID")
+                    b.Property<int>("ID")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("INTEGER");
+
+                    b.Property<string>("Name")
+                        .IsRequired()
+                        .HasColumnType("TEXT");
+
+                    b.HasKey("ID");
+
+                    b.ToTable("DataTypes");
+                });
+
+            modelBuilder.Entity("Komandir.Models.Field", b =>
+                {
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -49,18 +64,18 @@ namespace Komandir.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("ContentTypeAttributeID");
+                    b.HasKey("ID");
 
                     b.HasIndex("ContentTypeID");
 
                     b.HasIndex("DataTypeID");
 
-                    b.ToTable("ContentTypeAttributes");
+                    b.ToTable("Fields");
                 });
 
-            modelBuilder.Entity("Komandir.Models.ContentTypeAttributeEditor", b =>
+            modelBuilder.Entity("Komandir.Models.FieldEditor", b =>
                 {
-                    b.Property<int>("ContentTypeAttributeEditorID")
+                    b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
@@ -71,30 +86,15 @@ namespace Komandir.Migrations
                         .IsRequired()
                         .HasColumnType("TEXT");
 
-                    b.HasKey("ContentTypeAttributeEditorID");
+                    b.HasKey("ID");
 
-                    b.ToTable("ContentTypeAttributeEditors");
+                    b.ToTable("FieldEditors");
                 });
 
-            modelBuilder.Entity("Komandir.Models.DataType", b =>
-                {
-                    b.Property<int>("DataTypeID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("Name")
-                        .IsRequired()
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("DataTypeID");
-
-                    b.ToTable("DataTypes");
-                });
-
-            modelBuilder.Entity("Komandir.Models.ContentTypeAttribute", b =>
+            modelBuilder.Entity("Komandir.Models.Field", b =>
                 {
                     b.HasOne("Komandir.Models.ContentType", "ContentType")
-                        .WithMany("ContentTypeAttributes")
+                        .WithMany("Fields")
                         .HasForeignKey("ContentTypeID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();

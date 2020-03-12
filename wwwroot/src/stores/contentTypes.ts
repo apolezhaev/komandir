@@ -31,7 +31,7 @@ const reducers: { [action: string]: IReducer } = {
       contentTypes: [
         ...list.contentTypes.filter(
           (contentType: IContentType) =>
-            contentType.contentTypeID !== action.payload
+            contentType.id !== action.payload
         )
       ],
       error: list.error

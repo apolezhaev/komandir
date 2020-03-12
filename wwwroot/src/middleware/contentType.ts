@@ -32,7 +32,7 @@ class ContentTypeMiddleware implements IMiddleware {
     fields.forEach((field: IFieldProps) => {
       body[field.name] = field.value;
     });
-    const contentTypeID = +body.contentTypeID;
+    const contentTypeID = +body.id;
     fetch(
       contentTypeID > 0
         ? `http://localhost:5000/api/ContentTypes/${contentTypeID}`
@@ -50,7 +50,7 @@ class ContentTypeMiddleware implements IMiddleware {
         return response.json();
       })
       .then(response => {
-        if (response.contentTypeID)
+        if (response.id)
           window.location.assign("/komandir/contentTypes");
       })
       .catch(error => {
@@ -61,7 +61,7 @@ class ContentTypeMiddleware implements IMiddleware {
   delete(action: IAction, next: any) {
     const contentType = action.payload;
     fetch(
-      `http://localhost:5000/api/ContentTypes/${contentType.contentTypeID}`,
+      `http://localhost:5000/api/ContentTypes/${contentType.id}`,
       {
         method: "DELETE",
         headers: { "Content-Type": "application/json" }
@@ -74,7 +74,7 @@ class ContentTypeMiddleware implements IMiddleware {
         return response.json();
       })
       .then(response => {
-        action.payload = response.contentTypeID;
+        action.payload = response.id;
         next(action);
       })
       .catch(error =>
@@ -86,10 +86,10 @@ class ContentTypeMiddleware implements IMiddleware {
   }
 
   deleteField(action: IAction, next: any) {
-    const { attribute, result } = action.payload;
+    const { field, result } = action.payload;
     if (result === PopupResult.OK) {
       fetch(
-        `http://localhost:5000/api/ContentTypeAttributes/${attribute.contentTypeAttributeID}`,
+        `http://localhost:5000/api/Fields/${field.id}`,
         {
           method: "DELETE",
           headers: { "Content-Type": "application/json" }
@@ -97,12 +97,12 @@ class ContentTypeMiddleware implements IMiddleware {
       )
         .then(response => {
           if (!response.ok) {
-            throw new Error("Error deleting content type attribute.");
+            throw new Error("Error deleting content type field.");
           }
           return response.json();
         })
         .then(response => {
-          action.payload = response.contentTypeAttributeID;
+          action.payload = response.id;
           next(action);
         })
         .catch(error => next({ type: FORM_ERROR, payload: error }));
@@ -117,7 +117,7 @@ class ContentTypeMiddleware implements IMiddleware {
     let fields: IFieldProps[] = [
       {
         system: true,
-        name: "contentTypeID",
+        name: "id",
         dataTypeID: DataType.None
       },
       {
@@ -151,7 +151,7 @@ class ContentTypeMiddleware implements IMiddleware {
           fields.forEach(field => {
             field.value = response[field.name];
           });
-          fields = [...fields, ...response.contentTypeAttributes];
+          fields = [...fields, ...response.fields];
           action.payload = { fields };
           next(action);
         })

@@ -13,8 +13,8 @@ namespace Komandir.Data
             : base(options) {            
         }
         public DbSet<ContentType> ContentTypes { get; set; }
-        public DbSet<ContentTypeAttribute> ContentTypeAttributes { get; set; }
-        public DbSet<ContentTypeAttributeEditor> ContentTypeAttributeEditors { get; set; }
+        public DbSet<Field> Fields { get; set; }
+        public DbSet<FieldEditor> FieldEditors { get; set; }
         public DbSet<DataType> DataTypes { get; set; }
     }
 }

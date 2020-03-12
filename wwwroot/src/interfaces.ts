@@ -1,7 +1,7 @@
 import { RouteComponentProps } from "react-router-dom";
 
 export interface IContentType {
-  contentTypeID?: number;
+  id?: number;
   name?: string;
   description?: string;
 }
@@ -35,17 +35,17 @@ export interface IConfirmProps {
 }
 
 export enum DataType {
-  None = 10,
-  String = 1,
-  Date = 2,
-  DateTime = 3,
-  Lookup = 4,
-  Number = 5,
-  Text = 6
+  None = 1,
+  String = 2,
+  Date = 3,
+  DateTime = 4,
+  Lookup = 5,
+  Number = 6,
+  Text = 7
 }
 
 export interface IFieldProps {
-  contentTypeAttributeID?: number;
+  id?: number;
   name: string;
   regex?: IRegexProps;
   dataTypeID?: DataType;
@@ -68,7 +68,7 @@ export interface IFormParams {
   ID?: string;
 }
 
-export interface IMiddleware {}
+export interface IMiddleware { }
 
 export interface IContentTypeProps extends RouteComponentProps<IFormParams> {
   error?: string;

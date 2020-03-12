@@ -47,8 +47,8 @@ const reducers: { [action: string]: IReducer } = {
           const valid = new RegExp(field.regex.value).test(value);
           field.error = !valid
             ? field.regex.description ||
-              `'${value}' is not a correct value for ${field.description ||
-                name}`
+            `'${value}' is not a correct value for ${field.description ||
+            name}`
             : undefined;
         }
       }
@@ -71,8 +71,8 @@ const reducers: { [action: string]: IReducer } = {
       error: error,
       fields: [
         ...fields.filter(
-          (attribute: IFieldProps) =>
-            attribute.contentTypeAttributeID !== action.payload
+          (field: IFieldProps) =>
+            field.id !== action.payload
         )
       ]
     };

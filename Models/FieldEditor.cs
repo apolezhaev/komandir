@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 
 namespace Komandir.Models
 {
-    public class ContentTypeAttributeEditor
+    public class FieldEditor
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]        
-        public int ContentTypeAttributeEditorID { get; set; }
+        public int ID { get; set; }
         [Required]
         public string Name { get; set; }
         public string Component { get; set; }       

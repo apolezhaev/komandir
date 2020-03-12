@@ -10,7 +10,7 @@ namespace Komandir.Models
     public class DataType
     {
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int DataTypeID { get; set; }
+        public int ID { get; set; }
         [Required]
         public string Name { get; set; }
     }
