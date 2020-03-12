@@ -13,7 +13,11 @@ namespace Komandir.Models
         [Key, DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int ID { get; set; }
         [Required]
-        public string Name { get; set; }        
+        public string Name { get; set; }
+        public string DisplayName { get; set; }
+        public string Description { get; set; }
+        public bool Required { get; set; }
+        public string Regex { get; set; }
         public int DataTypeID { get; set; }
         [JsonIgnore]
         public DataType DataType { get; set; }
