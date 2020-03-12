@@ -5,7 +5,7 @@ import {
   IReducer
 } from "../interfaces";
 import {
-  CONTENT_TYPE_LIST_LOAD,
+  CONTENT_TYPE_READ_LIST,
   CONTENT_TYPE_DELETE_OK,
   CONTENT_TYPE_DELETE_CANCEL,
   CONTENT_TYPE_DELETE_PROMPT,
@@ -17,7 +17,7 @@ const INITIAL_STATE: IContentTypeListState = {
 };
 
 const reducers: { [action: string]: IReducer } = {
-  [CONTENT_TYPE_LIST_LOAD]: (state: any, action: IAction) => {
+  [CONTENT_TYPE_READ_LIST]: (state: any, action: IAction) => {
     const list = state as IContentTypeListState;
     return {
       contentTypes: [...list.contentTypes, ...action.payload],
@@ -30,8 +30,7 @@ const reducers: { [action: string]: IReducer } = {
     return {
       contentTypes: [
         ...list.contentTypes.filter(
-          (contentType: IContentType) =>
-            contentType.id !== action.payload
+          (contentType: IContentType) => contentType.id !== action.payload
         )
       ],
       error: list.error
@@ -64,7 +63,7 @@ const reducers: { [action: string]: IReducer } = {
   }
 };
 
-export function createContentTypesStore(
+export function createContentTypeListStore(
   state: any = INITIAL_STATE,
   action: IAction
 ): any {
