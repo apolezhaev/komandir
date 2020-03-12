@@ -3,7 +3,7 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import Form from "./Form";
-import { EditorFor, TextboxFor } from "./HtmlHelpers";
+import { EditorFor, TextboxFor, TextareaFor } from "./HtmlHelpers";
 import middleware from "../middleware/contentType";
 import {
   IContentTypeProps,
@@ -16,7 +16,8 @@ import {
   FORM_SAVE,
   CONTENT_TYPE_FIELD_DELETE_PROMPT,
   CONTENT_TYPE_FIELD_DELETE,
-  FORM_CHANGED
+  FORM_CHANGED,
+  CONTENT_TYPE_FIELD_EDIT_PROMPT
 } from "../actions";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -39,6 +40,7 @@ class ContentType extends React.Component<IContentTypeProps> {
       onChange,
       prompt,
       update,
+      editFieldPrompt,
       deleteField
     } = this.props;
     const invalid =
@@ -50,13 +52,12 @@ class ContentType extends React.Component<IContentTypeProps> {
         {error && <div className="error">Ошибка: {error}</div>}
         <Form>
           {fields
-            .filter(field => field.system)
+            .filter(field => field.system === true)
             .map((field: IFieldProps, i: Number) => (
               <div key={`field${i}`}>
                 <EditorFor {...field} onChange={onChange} />
               </div>
             ))}
-
           <Table size="small">
             <TableHead>
               <TableRow>
@@ -67,11 +68,11 @@ class ContentType extends React.Component<IContentTypeProps> {
             </TableHead>
             <TableBody>
               {fields
-                .filter(field => !field.system)
+                .filter(field => field.system !== true)
                 .map((field: IFieldProps, i: Number) => (
                   <TableRow key={`contentType${i}`}>
                     <TableCell>
-                      <Link href={`#${field.id}`}>
+                      <Link onClick={() => editFieldPrompt(field)}>
                         {field.name}
                       </Link>
                     </TableCell>
@@ -99,7 +100,7 @@ class ContentType extends React.Component<IContentTypeProps> {
 
         <Popup
           title="Confirmation required"
-          visible={current != null}
+          visible={current != null && current.deleting === true}
           onClose={(result: PopupResult) =>
             current && deleteField(result, current)
           }
@@ -109,13 +110,17 @@ class ContentType extends React.Component<IContentTypeProps> {
 
         <Popup
           title="Edit Field"
-          visible={current != null && current.deleting === true}
+          visible={current != null}
           onClose={(result: PopupResult) =>
             current && deleteField(result, current)
           }
         >
           <Form>
-            <TextboxFor name="name" system={false} />
+            <div><TextboxFor name="name" description="Name" value={current && current.name} /></div>
+            <div><TextboxFor name="displayName" description="Display Name" value={current && current.displayName} /></div>
+            <div><TextboxFor name="regex" description="Validation Expression" value={(current && current.regex != null) ? current.regex.value : ""} /></div>
+            <div><TextboxFor name="dataTypeID" description="Data Type" value={((current && current.dataTypeID) || DataType.String).toString()} /></div>
+            <div><TextareaFor name="description" description="Description" value={current && current.description} /></div>
           </Form>
         </Popup>
       </>
@@ -140,6 +145,12 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   prompt: (field: IFieldProps) => {
     dispatch({
       type: CONTENT_TYPE_FIELD_DELETE_PROMPT,
+      payload: field
+    });
+  },
+  editFieldPrompt: (field: IFieldProps) => {
+    dispatch({
+      type: CONTENT_TYPE_FIELD_EDIT_PROMPT,
       payload: field
     });
   },

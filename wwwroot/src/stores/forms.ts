@@ -9,7 +9,8 @@ import {
   FORM_LOAD,
   FORM_ERROR,
   CONTENT_TYPE_FIELD_DELETE_PROMPT,
-  CONTENT_TYPE_FIELD_DELETE
+  CONTENT_TYPE_FIELD_DELETE,
+  CONTENT_TYPE_FIELD_EDIT_PROMPT
 } from "../actions";
 
 const INITIAL_STATE: IContentTypeState = {
@@ -56,12 +57,21 @@ const reducers: { [action: string]: IReducer } = {
     return state;
   },
 
+  [CONTENT_TYPE_FIELD_EDIT_PROMPT]: (state: any, action: IAction) => {
+    let { fields, error } = state as IContentTypeState;
+    return {
+      error: error,
+      fields: [...fields],
+      current: { ...action.payload }
+    };
+  },
+
   [CONTENT_TYPE_FIELD_DELETE_PROMPT]: (state: any, action: IAction) => {
     let { fields, error } = state as IContentTypeState;
     return {
       error: error,
       fields: [...fields],
-      current: action.payload
+      current: { ...action.payload, deleting: true }
     };
   },
 

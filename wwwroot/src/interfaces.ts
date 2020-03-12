@@ -47,12 +47,14 @@ export enum DataType {
 export interface IFieldProps {
   id?: number;
   name: string;
+  displayName?: string;
+  required?: boolean;
   regex?: IRegexProps;
   dataTypeID?: DataType;
   contentTypeID?: number;
   description?: string;
   value?: string;
-  system: boolean;
+  system?: boolean;
   validationErrorMessage?: string;
   error?: string;
   onChange?(name: string, value: any): void;
@@ -76,6 +78,7 @@ export interface IContentTypeProps extends RouteComponentProps<IFormParams> {
   read(ID: number): void;
   update(fields: IFieldProps[]): void;
   prompt(field: IFieldProps): void;
+  editFieldPrompt(field: IFieldProps): void;
   current?: IFieldProps;
   deleteField(result: PopupResult, field: IFieldProps): void;
   onChange?(name: string, value: any): void;
