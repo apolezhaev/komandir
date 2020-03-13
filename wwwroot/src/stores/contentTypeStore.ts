@@ -60,8 +60,8 @@ const reducers: { [action: string]: IReducer } = {
           const valid = new RegExp(field.regex.value).test(value);
           field.error = !valid
             ? field.regex.description ||
-            `'${value}' is not a correct value for ${field.description ||
-            name}`
+              `'${value}' is not a correct value for ${field.description ||
+                name}`
             : undefined;
         }
       }

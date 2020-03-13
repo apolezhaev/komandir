@@ -3,7 +3,13 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import Form from "./Form";
-import { EditorFor, TextboxFor, TextareaFor, CheckboxFor, LookupFor } from "./HtmlHelpers";
+import {
+  EditorFor,
+  TextboxFor,
+  TextareaFor,
+  CheckboxFor,
+  LookupFor
+} from "./HtmlHelpers";
 import middleware from "../middleware/contentTypeMiddleware";
 import {
   IContentTypeProps,
@@ -113,7 +119,7 @@ class ContentType extends React.Component<IContentTypeProps> {
 
         <Popup
           title="Edit Field"
-          visible={current != null}
+          visible={current != null && current.deleting !== true}
           onClose={(result: PopupResult) =>
             current && deleteField(result, current)
           }
@@ -130,6 +136,7 @@ class ContentType extends React.Component<IContentTypeProps> {
               <TextboxFor
                 name="displayName"
                 description="Display Name"
+                onChange={onFieldChange}
                 value={current && current.displayName}
               />
             </div>
@@ -137,15 +144,15 @@ class ContentType extends React.Component<IContentTypeProps> {
               <TextboxFor
                 name="regex"
                 description="Validation Expression"
-                value={
-                  current && current.regex != null ? current.regex.value : ""
-                }
+                onChange={onFieldChange}
+                value={current && current.regex != null ? current.regex : ""}
               />
             </div>
             <div>
               <LookupFor
                 name="dataTypeID"
                 description="Data Type"
+                onChange={onFieldChange}
                 value={(
                   (current && current.dataTypeID) ||
                   DataType.String
@@ -156,6 +163,7 @@ class ContentType extends React.Component<IContentTypeProps> {
               <TextareaFor
                 name="description"
                 description="Description"
+                onChange={onFieldChange}
                 value={current && current.description}
               />
             </div>
