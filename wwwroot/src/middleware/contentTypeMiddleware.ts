@@ -5,7 +5,7 @@ import {
   IMiddleware,
   PopupResult
 } from "../interfaces";
-import { FORM_ERROR, CONTENT_TYPE_ERROR } from "../actions";
+import { CONTENT_TYPE_ERROR } from "../actions";
 
 class ContentTypeMiddleware implements IMiddleware {
   readList(action: IAction, next: any) {
@@ -50,23 +50,19 @@ class ContentTypeMiddleware implements IMiddleware {
         return response.json();
       })
       .then(response => {
-        if (response.id)
-          window.location.assign("/komandir/contentTypes");
+        if (response.id) window.location.assign("/komandir/contentTypes");
       })
       .catch(error => {
-        next({ type: FORM_ERROR, payload: error });
+        next({ type: CONTENT_TYPE_ERROR, payload: error });
       });
   }
 
   delete(action: IAction, next: any) {
     const contentType = action.payload;
-    fetch(
-      `http://localhost:5000/api/ContentTypes/${contentType.id}`,
-      {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" }
-      }
-    )
+    fetch(`http://localhost:5000/api/ContentTypes/${contentType.id}`, {
+      method: "DELETE",
+      headers: { "Content-Type": "application/json" }
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error("Error deleting content type.");
@@ -88,13 +84,10 @@ class ContentTypeMiddleware implements IMiddleware {
   deleteField(action: IAction, next: any) {
     const { field, result } = action.payload;
     if (result === PopupResult.OK) {
-      fetch(
-        `http://localhost:5000/api/Fields/${field.id}`,
-        {
-          method: "DELETE",
-          headers: { "Content-Type": "application/json" }
-        }
-      )
+      fetch(`http://localhost:5000/api/Fields/${field.id}`, {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+      })
         .then(response => {
           if (!response.ok) {
             throw new Error("Error deleting content type field.");
@@ -105,7 +98,7 @@ class ContentTypeMiddleware implements IMiddleware {
           action.payload = response.id;
           next(action);
         })
-        .catch(error => next({ type: FORM_ERROR, payload: error }));
+        .catch(error => next({ type: CONTENT_TYPE_ERROR, payload: error }));
     } else {
       action.payload = null;
       next(action);
@@ -155,7 +148,7 @@ class ContentTypeMiddleware implements IMiddleware {
           action.payload = { fields };
           next(action);
         })
-        .catch(error => next({ type: FORM_ERROR, payload: error }));
+        .catch(error => next({ type: CONTENT_TYPE_ERROR, payload: error }));
     } else {
       next(action);
     }

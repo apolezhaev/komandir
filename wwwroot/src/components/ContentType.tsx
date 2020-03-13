@@ -3,8 +3,8 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import Form from "./Form";
-import { EditorFor, TextboxFor, TextareaFor } from "./HtmlHelpers";
-import middleware from "../middleware/contentType";
+import { EditorFor, TextboxFor, TextareaFor, CheckboxFor } from "./HtmlHelpers";
+import middleware from "../middleware/contentTypeMiddleware";
 import {
   IContentTypeProps,
   IFieldProps,
@@ -12,12 +12,12 @@ import {
   PopupResult
 } from "../interfaces";
 import {
-  FORM_LOAD,
-  FORM_SAVE,
-  CONTENT_TYPE_FIELD_DELETE_PROMPT,
-  CONTENT_TYPE_FIELD_DELETE,
-  FORM_CHANGED,
-  CONTENT_TYPE_FIELD_EDIT_PROMPT
+  CONTENT_TYPE_READ,
+  CONTENT_TYPE_UPDATE,
+  CONTENT_TYPE_DELETE_FIELD_PROMPT,
+  CONTENT_TYPE_DELETE_FIELD,
+  CONTENT_TYPE_CHANGED,
+  CONTENT_TYPE_EDIT_FIELD_PROMPT
 } from "../actions";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -105,7 +105,8 @@ class ContentType extends React.Component<IContentTypeProps> {
             current && deleteField(result, current)
           }
         >
-          You are about to delete <strong>{current && current.name}</strong> and content related to this field. Continue?
+          You are about to delete <strong>{current && current.name}</strong> and
+          content related to this field. Continue?
         </Popup>
 
         <Popup
@@ -116,11 +117,54 @@ class ContentType extends React.Component<IContentTypeProps> {
           }
         >
           <Form>
-            <div><TextboxFor name="name" description="Name" value={current && current.name} /></div>
-            <div><TextboxFor name="displayName" description="Display Name" value={current && current.displayName} /></div>
-            <div><TextboxFor name="regex" description="Validation Expression" value={(current && current.regex != null) ? current.regex.value : ""} /></div>
-            <div><TextboxFor name="dataTypeID" description="Data Type" value={((current && current.dataTypeID) || DataType.String).toString()} /></div>
-            <div><TextareaFor name="description" description="Description" value={current && current.description} /></div>
+            <div>
+              <TextboxFor
+                name="name"
+                description="Name"
+                value={current && current.name}
+              />
+            </div>
+            <div>
+              <TextboxFor
+                name="displayName"
+                description="Display Name"
+                value={current && current.displayName}
+              />
+            </div>
+            <div>
+              <TextboxFor
+                name="regex"
+                description="Validation Expression"
+                value={
+                  current && current.regex != null ? current.regex.value : ""
+                }
+              />
+            </div>
+            <div>
+              <TextboxFor
+                name="dataTypeID"
+                description="Data Type"
+                value={(
+                  (current && current.dataTypeID) ||
+                  DataType.String
+                ).toString()}
+              />
+            </div>
+            <div>
+              <TextareaFor
+                name="description"
+                description="Description"
+                value={current && current.description}
+              />
+            </div>
+            <div>
+              <CheckboxFor
+                name="required"
+                description="Required"
+                onChange={onChange}
+                value={current && current.value === true}
+              />
+            </div>
           </Form>
         </Popup>
       </>
@@ -128,41 +172,41 @@ class ContentType extends React.Component<IContentTypeProps> {
   }
 }
 
-const mapStateToProps = (state: any) => state.forms;
+const mapStateToProps = (store: any) => store.contentType;
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   read: (ID: Number) =>
     dispatch({
-      type: FORM_LOAD,
+      type: CONTENT_TYPE_READ,
       payload: ID,
       middleware: middleware.read
     }),
   update: (fields: IFieldProps[]) =>
     dispatch({
-      type: FORM_SAVE,
+      type: CONTENT_TYPE_UPDATE,
       payload: fields,
       middleware: middleware.update
     }),
   prompt: (field: IFieldProps) => {
     dispatch({
-      type: CONTENT_TYPE_FIELD_DELETE_PROMPT,
+      type: CONTENT_TYPE_DELETE_FIELD_PROMPT,
       payload: field
     });
   },
   editFieldPrompt: (field: IFieldProps) => {
     dispatch({
-      type: CONTENT_TYPE_FIELD_EDIT_PROMPT,
+      type: CONTENT_TYPE_EDIT_FIELD_PROMPT,
       payload: field
     });
   },
   deleteField: (result: PopupResult, field: IFieldProps) => {
     dispatch({
-      type: CONTENT_TYPE_FIELD_DELETE,
+      type: CONTENT_TYPE_DELETE_FIELD,
       payload: { result, field },
       middleware: middleware.deleteField
     });
   },
   onChange: (name: string, value: any) => {
-    dispatch({ type: FORM_CHANGED, payload: { name, value } });
+    dispatch({ type: CONTENT_TYPE_CHANGED, payload: { name, value } });
   }
 });
 

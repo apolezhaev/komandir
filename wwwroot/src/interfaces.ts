@@ -41,7 +41,8 @@ export enum DataType {
   DateTime = 4,
   Lookup = 5,
   Number = 6,
-  Text = 7
+  Text = 7,
+  Boolean = 8
 }
 
 export interface IFieldProps {
@@ -53,7 +54,7 @@ export interface IFieldProps {
   dataTypeID?: DataType;
   contentTypeID?: number;
   description?: string;
-  value?: string;
+  value?: any;
   system?: boolean;
   validationErrorMessage?: string;
   error?: string;
@@ -70,7 +71,7 @@ export interface IFormParams {
   ID?: string;
 }
 
-export interface IMiddleware { }
+export interface IMiddleware {}
 
 export interface IContentTypeProps extends RouteComponentProps<IFormParams> {
   error?: string;

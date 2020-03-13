@@ -2,7 +2,7 @@ import React from "react";
 import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import {
-  CONTENT_TYPE_LIST_LOAD,
+  CONTENT_TYPE_READ_LIST,
   CONTENT_TYPE_DELETE_OK,
   CONTENT_TYPE_DELETE_CANCEL,
   CONTENT_TYPE_DELETE_PROMPT
@@ -16,7 +16,7 @@ import TableRow from "@material-ui/core/TableRow";
 import Button from "@material-ui/core/Button";
 import Link from "@material-ui/core/Link";
 import Confirm from "./Confirm";
-import middleware from "../middleware/contentType";
+import middleware from "../middleware/contentTypeMiddleware";
 
 class ContentTypes extends React.Component<IContentTypeListProps> {
   componentDidMount() {
@@ -48,9 +48,7 @@ class ContentTypes extends React.Component<IContentTypeListProps> {
                 return (
                   <TableRow key={`contentType${i}`}>
                     <TableCell>
-                      <Link
-                        href={`/komandir/contentTypes/${contentType.id}`}
-                      >
+                      <Link href={`/komandir/contentTypes/${contentType.id}`}>
                         {contentType.name}
                       </Link>
                     </TableCell>
@@ -70,15 +68,15 @@ class ContentTypes extends React.Component<IContentTypeListProps> {
             current && this.props.delete(confirmed, current)
           }
         >
-          You are about to delete <strong>{current && current.name}</strong>. Continue?
+          You are about to delete <strong>{current && current.name}</strong>.
+          Continue?
         </Confirm>
       </>
     );
   }
 }
 
-const mapStateToProps = (state: any) => state.contentTypes;
-
+const mapStateToProps = (store: any) => store.contentTypeList;
 const mapDispatchToProps = (dispatch: Dispatch) => ({
   delete: (confirmed: boolean, contentType: IContentType) => {
     if (confirmed) {
@@ -91,7 +89,7 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   },
   readList: () =>
     dispatch({
-      type: CONTENT_TYPE_LIST_LOAD,
+      type: CONTENT_TYPE_READ_LIST,
       middleware: middleware.readList
     }),
   prompt: (contentType: IContentType) => {
