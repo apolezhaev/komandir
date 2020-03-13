@@ -11,9 +11,7 @@ import {
   FormControlLabel,
   Switch,
   Select,
-  SelectProps,
   InputLabel,
-  Input,
   FormControl
 } from "@material-ui/core";
 
@@ -88,7 +86,12 @@ export function LookupFor(field: IFieldProps) {
     minWidth: 120
   };
   return (
-    <FormControl variant="filled" margin="dense" style={style}>
+    <FormControl
+      variant="filled"
+      margin="dense"
+      style={style}
+      error={error !== undefined}
+    >
       <InputLabel id={name}>{description || name}</InputLabel>
       <Select
         name={name}
