@@ -32,7 +32,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Link from "@material-ui/core/Link";
-import Popup from "./Popup";
+import { Popup } from "./Popup";
 
 class ContentType extends React.Component<IContentTypeProps> {
   componentDidMount() {
@@ -114,7 +114,9 @@ class ContentType extends React.Component<IContentTypeProps> {
           }
         >
           You are about to delete <strong>{current && current.name}</strong> and
-          content related to this field. Continue?
+          content related to this field.
+          <br />
+          Continue?
         </Popup>
 
         <Popup

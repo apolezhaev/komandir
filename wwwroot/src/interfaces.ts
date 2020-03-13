@@ -71,7 +71,7 @@ export interface IFormParams {
   ID?: string;
 }
 
-export interface IMiddleware { }
+export interface IMiddleware {}
 
 export interface IContentTypeProps extends RouteComponentProps<IFormParams> {
   error?: string;
@@ -101,4 +101,7 @@ export interface IPopupProps {
   visible: boolean;
   title: string;
   onClose?(result: PopupResult): void;
+  minWidth?: number;
+  minHeight?: number;
+  children: any;
 }

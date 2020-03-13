@@ -50,6 +50,7 @@ export function CheckboxFor(field: IFieldProps) {
     <FormControlLabel
       control={
         <Switch
+          color="primary"
           checked={(value as boolean) === true}
           onChange={(e: React.ChangeEvent) =>
             onChange && onChange(name, (e.target as HTMLInputElement).checked)
