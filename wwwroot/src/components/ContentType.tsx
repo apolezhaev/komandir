@@ -3,7 +3,7 @@ import { Dispatch } from "redux";
 import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
 import Form from "./Form";
-import { EditorFor, TextboxFor, TextareaFor, CheckboxFor } from "./HtmlHelpers";
+import { EditorFor, TextboxFor, TextareaFor, CheckboxFor, LookupFor } from "./HtmlHelpers";
 import middleware from "../middleware/contentTypeMiddleware";
 import {
   IContentTypeProps,
@@ -14,10 +14,11 @@ import {
 import {
   CONTENT_TYPE_READ,
   CONTENT_TYPE_UPDATE,
-  CONTENT_TYPE_DELETE_FIELD_PROMPT,
-  CONTENT_TYPE_DELETE_FIELD,
-  CONTENT_TYPE_CHANGED,
-  CONTENT_TYPE_EDIT_FIELD_PROMPT
+  CONTENT_TYPE_FIELD_DELETE_PROMPT,
+  CONTENT_TYPE_FIELD_DELETE,
+  CONTENT_TYPE_CHANGE,
+  CONTENT_TYPE_FIELD_EDIT_PROMPT,
+  CONTENT_TYPE_FIELD_CHANGE
 } from "../actions";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -41,7 +42,8 @@ class ContentType extends React.Component<IContentTypeProps> {
       prompt,
       update,
       editFieldPrompt,
-      deleteField
+      deleteField,
+      onFieldChange
     } = this.props;
     const invalid =
       fields.filter(
@@ -141,7 +143,7 @@ class ContentType extends React.Component<IContentTypeProps> {
               />
             </div>
             <div>
-              <TextboxFor
+              <LookupFor
                 name="dataTypeID"
                 description="Data Type"
                 value={(
@@ -161,8 +163,8 @@ class ContentType extends React.Component<IContentTypeProps> {
               <CheckboxFor
                 name="required"
                 description="Required"
-                onChange={onChange}
-                value={current && current.value === true}
+                onChange={onFieldChange}
+                value={current && current.required === true}
               />
             </div>
           </Form>
@@ -188,25 +190,28 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
     }),
   prompt: (field: IFieldProps) => {
     dispatch({
-      type: CONTENT_TYPE_DELETE_FIELD_PROMPT,
+      type: CONTENT_TYPE_FIELD_DELETE_PROMPT,
       payload: field
     });
   },
   editFieldPrompt: (field: IFieldProps) => {
     dispatch({
-      type: CONTENT_TYPE_EDIT_FIELD_PROMPT,
+      type: CONTENT_TYPE_FIELD_EDIT_PROMPT,
       payload: field
     });
   },
   deleteField: (result: PopupResult, field: IFieldProps) => {
     dispatch({
-      type: CONTENT_TYPE_DELETE_FIELD,
+      type: CONTENT_TYPE_FIELD_DELETE,
       payload: { result, field },
       middleware: middleware.deleteField
     });
   },
+  onFieldChange: (name: string, value: any) => {
+    dispatch({ type: CONTENT_TYPE_FIELD_CHANGE, payload: { name, value } });
+  },
   onChange: (name: string, value: any) => {
-    dispatch({ type: CONTENT_TYPE_CHANGED, payload: { name, value } });
+    dispatch({ type: CONTENT_TYPE_CHANGE, payload: { name, value } });
   }
 });
 

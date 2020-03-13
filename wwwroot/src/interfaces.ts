@@ -71,7 +71,7 @@ export interface IFormParams {
   ID?: string;
 }
 
-export interface IMiddleware {}
+export interface IMiddleware { }
 
 export interface IContentTypeProps extends RouteComponentProps<IFormParams> {
   error?: string;
@@ -83,6 +83,7 @@ export interface IContentTypeProps extends RouteComponentProps<IFormParams> {
   current?: IFieldProps;
   deleteField(result: PopupResult, field: IFieldProps): void;
   onChange?(name: string, value: any): void;
+  onFieldChange?(name: string, value: any): void;
 }
 
 export interface IContentTypeState {
