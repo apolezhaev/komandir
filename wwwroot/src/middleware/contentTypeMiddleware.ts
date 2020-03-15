@@ -105,17 +105,49 @@ class ContentTypeMiddleware implements IMiddleware {
     }
   }
 
+  updateField(action: IAction, next: any) {
+    const { field, result } = action.payload;
+    if (result === PopupResult.OK) {
+      fetch(
+        field.id > 0
+          ? `http://localhost:5000/api/Fields/${field.id}`
+          : "http://localhost:5000/api/Fields",
+        {
+          method: field.id > 0 ? "PUT" : "POST",
+          body: JSON.stringify(field),
+          headers: { "Content-Type": "application/json" }
+        }
+      )
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("Error saving content type field.");
+          }
+          return response.json();
+        })
+        .then(response => {
+          if (response.id) {
+            action.payload.field = { ...response };
+            next(action);
+          }
+        })
+        .catch(error => {
+          next({ type: CONTENT_TYPE_ERROR, payload: error });
+        });
+    } else {
+      action.payload = null;
+      next(action);
+    }
+  }
+
   read(action: IAction, next: any) {
     const contentTypeID = action.payload;
     let fields: IFieldProps[] = [
       {
-        system: true,
         name: "id",
         dataTypeID: DataType.None
       },
       {
         name: "name",
-        system: true,
         regex: {
           value: "^[a-zA-Z0-9]+$",
           description: "Alphanumeric chars only."
@@ -123,7 +155,6 @@ class ContentTypeMiddleware implements IMiddleware {
         description: "Name"
       },
       {
-        system: true,
         name: "description",
         dataTypeID: DataType.Text,
         description: "Description"

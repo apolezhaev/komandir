@@ -44,7 +44,7 @@ namespace Komandir.Controllers
 
         // PUT: api/Fields/5
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutField(int id, Field field)
+        public async Task<ActionResult<Field>> PutField(int id, Field field)
         {
             if (id != field.ID)
             {
@@ -59,17 +59,13 @@ namespace Komandir.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!FieldExists(id))
-                {
-                    return NotFound();
-                }
-                else
-                {
+                if (_context.Fields.Any(x => x.ID == id))
                     throw;
-                }
+
+                return NotFound();                
             }
 
-            return NoContent();
+            return field;
         }
 
         // POST: api/Fields

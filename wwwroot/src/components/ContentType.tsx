@@ -23,8 +23,10 @@ import {
   CONTENT_TYPE_FIELD_DELETE_PROMPT,
   CONTENT_TYPE_FIELD_DELETE,
   CONTENT_TYPE_CHANGE,
-  CONTENT_TYPE_FIELD_EDIT_PROMPT,
-  CONTENT_TYPE_FIELD_CHANGE
+  CONTENT_TYPE_FIELD_EDIT,
+  CONTENT_TYPE_FIELD_CHANGE,
+  CONTENT_TYPE_FIELD_NEW,
+  CONTENT_TYPE_FIELD_UPDATE
 } from "../actions";
 import Table from "@material-ui/core/Table";
 import TableBody from "@material-ui/core/TableBody";
@@ -35,9 +37,13 @@ import Link from "@material-ui/core/Link";
 import { Popup } from "./Popup";
 
 class ContentType extends React.Component<IContentTypeProps> {
+  contentTypeID: number;
+  constructor(props: IContentTypeProps) {
+    super(props);
+    this.contentTypeID = Number(props.match.params.ID);
+  }
   componentDidMount() {
-    const contentTypeID = Number(this.props.match.params.ID);
-    this.props.read(contentTypeID);
+    this.props.read(this.contentTypeID);
   }
   render() {
     const {
@@ -47,54 +53,28 @@ class ContentType extends React.Component<IContentTypeProps> {
       onChange,
       prompt,
       update,
-      editFieldPrompt,
+      editField,
       deleteField,
+      newField,
+      updateField,
       onFieldChange
     } = this.props;
     const invalid =
       fields.filter(
-        (field: IFieldProps) => field.regex && (field.error || !field.value)
+        (field: IFieldProps) =>
+          field.id === undefined && field.regex && (field.error || !field.value)
       ).length > 0;
     return (
       <>
         {error && <div className="error">Ошибка: {error}</div>}
         <Form>
           {fields
-            .filter(field => field.system === true)
+            .filter(field => field.id === undefined)
             .map((field: IFieldProps, i: Number) => (
               <div key={`field${i}`}>
                 <EditorFor {...field} onChange={onChange} />
               </div>
             ))}
-          <Table size="small">
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Data Type</TableCell>
-                <TableCell></TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {fields
-                .filter(field => field.system !== true)
-                .map((field: IFieldProps, i: Number) => (
-                  <TableRow key={`contentType${i}`}>
-                    <TableCell>
-                      <Link onClick={() => editFieldPrompt(field)}>
-                        {field.name}
-                      </Link>
-                    </TableCell>
-                    <TableCell>
-                      {field.dataTypeID && DataType[field.dataTypeID]}
-                    </TableCell>
-                    <TableCell align="right">
-                      <Button onClick={() => prompt(field)}>del</Button>
-                    </TableCell>
-                  </TableRow>
-                ))}
-            </TableBody>
-          </Table>
-
           <Button
             variant="contained"
             disabled={invalid}
@@ -105,6 +85,48 @@ class ContentType extends React.Component<IContentTypeProps> {
           </Button>
           <Button href="/komandir/contentTypes">Cancel</Button>
         </Form>
+
+        {this.contentTypeID > 0 && (
+          <div>
+            <br />
+            <br />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={() => newField(this.contentTypeID)}
+            >
+              New Field
+            </Button>
+            <Table size="small">
+              <TableHead>
+                <TableRow>
+                  <TableCell>Name</TableCell>
+                  <TableCell>Data Type</TableCell>
+                  <TableCell></TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {fields
+                  .filter(field => field.id != null)
+                  .map((field: IFieldProps, i: Number) => (
+                    <TableRow key={`contentType${i}`}>
+                      <TableCell>
+                        <Link onClick={() => editField(field)}>
+                          {field.name}
+                        </Link>
+                      </TableCell>
+                      <TableCell>
+                        {field.dataTypeID && DataType[field.dataTypeID]}
+                      </TableCell>
+                      <TableCell align="right">
+                        <Button onClick={() => prompt(field)}>del</Button>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+              </TableBody>
+            </Table>
+          </div>
+        )}
 
         <Popup
           title="Confirmation required"
@@ -123,7 +145,7 @@ class ContentType extends React.Component<IContentTypeProps> {
           title="Edit Field"
           visible={current != null && current.deleting !== true}
           onClose={(result: PopupResult) =>
-            current && deleteField(result, current)
+            current && updateField(result, current)
           }
         >
           <Form>
@@ -131,6 +153,7 @@ class ContentType extends React.Component<IContentTypeProps> {
               <TextboxFor
                 name="name"
                 description="Name"
+                onChange={onFieldChange}
                 value={current && current.name}
               />
             </div>
@@ -155,10 +178,7 @@ class ContentType extends React.Component<IContentTypeProps> {
                 name="dataTypeID"
                 description="Data Type"
                 onChange={onFieldChange}
-                value={(
-                  (current && current.dataTypeID) ||
-                  DataType.String
-                ).toString()}
+                value={(current && current.dataTypeID) || DataType.String}
               />
             </div>
             <div>
@@ -204,9 +224,9 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
       payload: field
     });
   },
-  editFieldPrompt: (field: IFieldProps) => {
+  editField: (field: IFieldProps) => {
     dispatch({
-      type: CONTENT_TYPE_FIELD_EDIT_PROMPT,
+      type: CONTENT_TYPE_FIELD_EDIT,
       payload: field
     });
   },
@@ -222,6 +242,16 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   },
   onChange: (name: string, value: any) => {
     dispatch({ type: CONTENT_TYPE_CHANGE, payload: { name, value } });
+  },
+  newField: (contentTypeID: number) => {
+    dispatch({ type: CONTENT_TYPE_FIELD_NEW, payload: contentTypeID });
+  },
+  updateField: (result: PopupResult, field: IFieldProps) => {
+    dispatch({
+      type: CONTENT_TYPE_FIELD_UPDATE,
+      payload: { result, field },
+      middleware: middleware.updateField
+    });
   }
 });
 

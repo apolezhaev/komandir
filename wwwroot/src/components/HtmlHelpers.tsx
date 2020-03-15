@@ -102,7 +102,7 @@ export function LookupFor(field: IFieldProps) {
         {Object.entries(DataType)
           .filter(([value, text]) => !isNaN(Number(value)))
           .map(([value, text]) => (
-            <MenuItem value={value}>{text}</MenuItem>
+            <MenuItem value={Number(value)}>{text}</MenuItem>
           ))}
       </Select>
     </FormControl>

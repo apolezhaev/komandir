@@ -55,7 +55,6 @@ export interface IFieldProps {
   contentTypeID?: number;
   description?: string;
   value?: any;
-  system?: boolean;
   validationErrorMessage?: string;
   error?: string;
   onChange?(name: string, value: any): void;
@@ -79,11 +78,13 @@ export interface IContentTypeProps extends RouteComponentProps<IFormParams> {
   read(ID: number): void;
   update(fields: IFieldProps[]): void;
   prompt(field: IFieldProps): void;
-  editFieldPrompt(field: IFieldProps): void;
+  editField(field: IFieldProps): void;
   current?: IFieldProps;
   deleteField(result: PopupResult, field: IFieldProps): void;
   onChange?(name: string, value: any): void;
   onFieldChange?(name: string, value: any): void;
+  newField(ID: number): void;
+  updateField(result: PopupResult, field: IFieldProps): void;
 }
 
 export interface IContentTypeState {
