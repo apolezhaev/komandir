@@ -6,19 +6,29 @@ import { BrowserRouter as Routes, Switch, Route } from "react-router-dom";
 //import MiniDrawer from "./components/MiniDrawer";
 
 const topMenu = [
-  { link: "/komandir/contentTypes", text: "Content Types" }
+  { link: "/komandir/contentTypes", text: "Content Types" },
+  { link: "/komandir/content", text: "Content" }
 ];
 
-const topMenuStyle = {
-  color: "red",
-  padding: "15px"
+const styles = {
+  topMenu: {
+    color: "red",
+    padding: "15px"
+  },
+  topMenuItem: {
+    padding: "15px"
+  }
 };
 
 function App() {
   return (
     <>
-      <div style={topMenuStyle}>
-        {topMenu.map((m, i) => <a key={`menu${i}`} href={m.link}>{m.text}</a>)}
+      <div style={styles.topMenu}>
+        {topMenu.map((m, i) => (
+          <a key={`menu${i}`} style={styles.topMenuItem} href={m.link}>
+            {m.text}
+          </a>
+        ))}
       </div>
       <Routes>
         <Switch>
