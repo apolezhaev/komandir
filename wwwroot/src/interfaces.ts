@@ -70,7 +70,11 @@ export interface IFormParams {
   ID?: string;
 }
 
-export interface IMiddleware {}
+export interface IMiddleware {
+}
+
+export interface IContentProps {
+}
 
 export interface IContentTypeProps extends RouteComponentProps<IFormParams> {
   error?: string;
@@ -105,4 +109,21 @@ export interface IPopupProps {
   minWidth?: number;
   minHeight?: number;
   children: any;
+}
+
+export interface IContentState {
+  error?: string;
+}
+
+export interface IContentProps {
+  error?: string;
+}
+
+export enum Mode {
+  ContentTypes = 1,
+  Content = 2
+}
+
+export interface ITopMenuProps {
+  mode?: Mode;
 }

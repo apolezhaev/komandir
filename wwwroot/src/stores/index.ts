@@ -1,6 +1,7 @@
 import { createStore, combineReducers, applyMiddleware } from "redux";
 import { createContentTypeListStore } from "./contentTypeListStore";
 import { createContentTypeStore } from "./contentTypeStore";
+import { createContentStore } from "./contentStore";
 import { IAction } from "../interfaces";
 
 const middleware = () => (next: any) => (action: IAction) => {
@@ -11,7 +12,8 @@ const middleware = () => (next: any) => (action: IAction) => {
 export default createStore(
   combineReducers({
     contentTypeList: createContentTypeListStore,
-    contentType: createContentTypeStore
+    contentType: createContentTypeStore,
+    content: createContentStore
   }),
   applyMiddleware(middleware)
 );

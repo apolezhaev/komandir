@@ -50,7 +50,14 @@ class ContentTypeMiddleware implements IMiddleware {
         return response.json();
       })
       .then(response => {
-        if (response.id) window.location.assign("/komandir/contentTypes");
+        if (response.id) {
+          //if (window.history.pushState) {
+          //  window.history.pushState("object or string", "Title", "/komandir/contentTypes");
+          //} else {
+          //  window.location.assign("/komandir/contentTypes");
+          //}
+          window.location.assign("/komandir/contentTypes");
+        }
       })
       .catch(error => {
         next({ type: CONTENT_TYPE_ERROR, payload: error });

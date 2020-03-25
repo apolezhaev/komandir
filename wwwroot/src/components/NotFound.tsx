@@ -1,7 +1,11 @@
 import React from "react";
+import TopMenu from "./TopMenu";
 
 function NotFound() {
-  return <>404 (Not Found)</>;
+  return <>
+    <TopMenu />
+    <div>404 (Not Found)</div>
+  </>;
 }
 
 export default NotFound;

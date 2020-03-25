@@ -15,7 +15,8 @@ import {
   IContentTypeProps,
   IFieldProps,
   DataType,
-  PopupResult
+  PopupResult,
+  Mode
 } from "../interfaces";
 import {
   CONTENT_TYPE_READ,
@@ -34,6 +35,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import Link from "@material-ui/core/Link";
+import TopMenu from "./TopMenu";
 import { Popup } from "./Popup";
 
 class ContentType extends React.Component<IContentTypeProps> {
@@ -66,6 +68,7 @@ class ContentType extends React.Component<IContentTypeProps> {
       ).length > 0;
     return (
       <>
+        <TopMenu mode={Mode.ContentTypes} />
         {error && <div className="error">Ошибка: {error}</div>}
         <Form>
           {fields

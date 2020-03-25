@@ -7,8 +7,9 @@ import {
   CONTENT_TYPE_DELETE_CANCEL,
   CONTENT_TYPE_DELETE_PROMPT
 } from "../actions";
-import { IContentType, IContentTypeListProps } from "../interfaces";
+import { IContentType, IContentTypeListProps, Mode } from "../interfaces";
 import Table from "@material-ui/core/Table";
+import TopMenu from "./TopMenu";
 import TableBody from "@material-ui/core/TableBody";
 import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
@@ -26,6 +27,7 @@ class ContentTypes extends React.Component<IContentTypeListProps> {
     const { current, error, prompt, contentTypes } = this.props;
     return (
       <>
+        <TopMenu mode={Mode.ContentTypes} />
         {error && <div className="error">Ошибка: {error}</div>}
         <Button
           variant="contained"
