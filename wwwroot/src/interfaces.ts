@@ -76,14 +76,11 @@ export interface IMiddleware {
 export interface IContentProps {
 }
 
-export interface IContentTypeProps extends RouteComponentProps<IFormParams> {
-  error?: string;
-  fields: IFieldProps[];
+export interface IContentTypeProps extends IContentTypeState, RouteComponentProps<IFormParams> {
   read(ID: number): void;
   update(fields: IFieldProps[]): void;
   prompt(field: IFieldProps): void;
   editField(field: IFieldProps): void;
-  current?: IFieldProps;
   deleteField(result: PopupResult, field: IFieldProps): void;
   onChange?(name: string, value: any): void;
   onFieldChange?(name: string, value: any): void;
@@ -113,10 +110,11 @@ export interface IPopupProps {
 
 export interface IContentState {
   error?: string;
+  contentTypes: Array<IContentType>;
 }
 
-export interface IContentProps {
-  error?: string;
+export interface IContentProps extends IContentState, RouteComponentProps<IFormParams> {
+  readList(): void;
 }
 
 export enum Mode {

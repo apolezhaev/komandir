@@ -8,15 +8,17 @@ import {
 } from "../actions";
 
 const INITIAL_STATE: IContentState = {
+  contentTypes: []
 };
 
 const reducers: { [action: string]: IReducer } = {
   [CONTENT_READ]: (state: any, action: IAction) => {
-    const contentState = state as IContentState;
+    const list = state as IContentState;
     return {
-      error: contentState.error
+      contentTypes: [...list.contentTypes, ...action.payload],
+      error: list.error
     };
-  }
+  },
 };
 
 export function createContentStore(

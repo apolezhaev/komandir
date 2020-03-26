@@ -22,8 +22,8 @@ function App() {
             component={ContentTypes}
           />
           <Route
-            exact={true}
-            path="/komandir/content"
+            exact={false}
+            path="/komandir/content/:ID?"
             component={Content}
           />
           <Route path="*" component={NotFound} />
