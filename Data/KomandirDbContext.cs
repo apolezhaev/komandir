@@ -16,5 +16,6 @@ namespace Komandir.Data
         public DbSet<Field> Fields { get; set; }
         public DbSet<FieldEditor> FieldEditors { get; set; }
         public DbSet<DataType> DataTypes { get; set; }
+        public DbSet<Content> Content { get; set; }
     }
 }

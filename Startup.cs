@@ -26,8 +26,7 @@ using Microsoft.AspNetCore.SpaServices.ReactDevelopmentServer;
 namespace Komandir
 {
     public class Startup
-    {
-        private Hosting.IWebHostEnvironment _environment;
+    {        
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;         

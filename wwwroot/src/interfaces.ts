@@ -6,6 +6,10 @@ export interface IContentType {
   description?: string;
 }
 
+export interface IComponentState {
+  error?: string;
+}
+
 export interface IAction {
   type: string;
   payload: any;
@@ -18,8 +22,7 @@ export interface IContentTypeListProps extends IContentTypeListState {
   prompt(contentType: IContentType): void;
 }
 
-export interface IContentTypeListState {
-  error?: string;
+export interface IContentTypeListState extends IComponentState {
   contentTypes: Array<IContentType>;
   current?: IContentType;
 }
@@ -70,13 +73,13 @@ export interface IContentTypeParams {
   contentTypeID?: string;
 }
 
-export interface IMiddleware {
-}
+export interface IMiddleware {}
 
-export interface IContentProps {
-}
+export interface IContentProps {}
 
-export interface IContentTypeProps extends IContentTypeState, RouteComponentProps<IContentTypeParams> {
+export interface IContentTypeProps
+  extends IContentTypeState,
+    RouteComponentProps<IContentTypeParams> {
   read(ID: number): void;
   update(fields: IFieldProps[]): void;
   prompt(field: IFieldProps): void;
@@ -88,8 +91,7 @@ export interface IContentTypeProps extends IContentTypeState, RouteComponentProp
   updateField(result: PopupResult, field: IFieldProps): void;
 }
 
-export interface IContentTypeState {
-  error?: string;
+export interface IContentTypeState extends IComponentState {
   fields: IFieldProps[];
   current?: IFieldProps;
 }
@@ -108,8 +110,7 @@ export interface IPopupProps {
   children: any;
 }
 
-export interface IContentState {
-  error?: string;
+export interface IContentState extends IComponentState {
   menuItems: Array<IContentType>;
 }
 
@@ -118,16 +119,18 @@ export interface IContentParams {
   contentID?: string;
 }
 
-export interface IContentProps extends IContentState, RouteComponentProps<IContentParams> {
+export interface IContentProps
+  extends IContentState,
+    RouteComponentProps<IContentParams> {
   readList(): void;
   create(contentTypeID: number): void;
 }
 
-export enum Mode {
+export enum Section {
   ContentTypes = 1,
   Content = 2
 }
 
 export interface ITopMenuProps {
-  mode?: Mode;
+  section?: Section;
 }

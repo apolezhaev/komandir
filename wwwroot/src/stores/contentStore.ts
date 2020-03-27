@@ -1,11 +1,5 @@
-import {
-  IAction,
-  IReducer,
-  IContentState
-} from "../interfaces";
-import {
-  CONTENT_READ, CONTENT_CREATE
-} from "../actions";
+import { IAction, IReducer, IContentState } from "../interfaces";
+import { CONTENT_READ, CONTENT_CREATE, CONTENT_ERROR } from "../actions";
 
 const INITIAL_STATE: IContentState = {
   menuItems: []
@@ -13,17 +7,24 @@ const INITIAL_STATE: IContentState = {
 
 const reducers: { [action: string]: IReducer } = {
   [CONTENT_READ]: (state: any, action: IAction) => {
-    const list = state as IContentState;
+    const { menuItems, error } = state;
     return {
-      menuItems: [...list.menuItems, ...action.payload],
-      error: list.error
+      menuItems: [...menuItems, ...action.payload],
+      error
+    };
+  },
+  [CONTENT_ERROR]: (state: any, action: IAction) => {
+    const { menuItems } = state;
+    return {
+      menuItems: [...menuItems],
+      error: action.payload?.message
     };
   },
   [CONTENT_CREATE]: (state: any, action: IAction) => {
-    const list = state as IContentState;
+    const { menuItems, error } = state;
     return {
-      menuItems: [...list.menuItems, ...action.payload],
-      error: list.error
+      menuItems: [...menuItems, ...action.payload],
+      error
     };
   }
 };

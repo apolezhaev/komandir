@@ -16,7 +16,7 @@ import {
   IFieldProps,
   DataType,
   PopupResult,
-  Mode
+  Section
 } from "../interfaces";
 import {
   CONTENT_TYPE_READ,
@@ -65,7 +65,7 @@ class ContentType extends React.Component<IContentTypeProps> {
       ).length > 0;
     return (
       <>
-        <TopMenu mode={Mode.ContentTypes} />
+        <TopMenu section={Section.ContentTypes} />
         {error && <div className="error">Ошибка: {error}</div>}
         <Form>
           {fields
