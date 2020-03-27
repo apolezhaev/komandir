@@ -13,7 +13,7 @@ function App() {
         <Switch>
           <Route
             exact={true}
-            path="/komandir/contentTypes/:ID"
+            path="/komandir/contentTypes/:contentTypeID"
             component={ContentType}
           />
           <Route
@@ -23,7 +23,7 @@ function App() {
           />
           <Route
             exact={false}
-            path="/komandir/content/:ID?"
+            path="/komandir/content/:contentTypeID?/:contentID?"
             component={Content}
           />
           <Route path="*" component={NotFound} />

@@ -5,7 +5,7 @@ import {
 import contentTypes from "../middleware/contentTypeMiddleware";
 
 class ContentMiddleware implements IMiddleware {
-	read(action: IAction, next: any) {
+	create(action: IAction, next: any) {
 		next(action);
 	}
 	readList(action: IAction, next: any) {

@@ -66,8 +66,8 @@ export interface IRegexProps {
   description?: string;
 }
 
-export interface IFormParams {
-  ID?: string;
+export interface IContentTypeParams {
+  contentTypeID?: string;
 }
 
 export interface IMiddleware {
@@ -76,7 +76,7 @@ export interface IMiddleware {
 export interface IContentProps {
 }
 
-export interface IContentTypeProps extends IContentTypeState, RouteComponentProps<IFormParams> {
+export interface IContentTypeProps extends IContentTypeState, RouteComponentProps<IContentTypeParams> {
   read(ID: number): void;
   update(fields: IFieldProps[]): void;
   prompt(field: IFieldProps): void;
@@ -110,11 +110,17 @@ export interface IPopupProps {
 
 export interface IContentState {
   error?: string;
-  contentTypes: Array<IContentType>;
+  menuItems: Array<IContentType>;
 }
 
-export interface IContentProps extends IContentState, RouteComponentProps<IFormParams> {
+export interface IContentParams {
+  contentTypeID?: string;
+  contentID?: string;
+}
+
+export interface IContentProps extends IContentState, RouteComponentProps<IContentParams> {
   readList(): void;
+  create(contentTypeID: number): void;
 }
 
 export enum Mode {

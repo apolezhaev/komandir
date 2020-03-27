@@ -5,45 +5,41 @@ import middleware from "../middleware/contentMiddleware";
 import { IContentProps, Mode, IContentType } from "../interfaces";
 import TopMenu from "./TopMenu";
 import {
-	CONTENT_READ
+	CONTENT_READ,
+	CONTENT_CREATE
 } from "../actions";
 import { Button } from "@material-ui/core";
 
+
 class Content extends React.Component<IContentProps> {
-	contentTypeID: number;
-	constructor(props: IContentProps) {
-		super(props);
-		this.contentTypeID = Number(props.match.params.ID);
-	}
 	componentDidMount() {
 		this.props.readList();
 	}
 	render() {
-		const styles = {
-			layout: {
-				display: "flex"
-			}
-		};
-		const { contentTypes } = this.props;
+		const { menuItems, create } = this.props;
+		const { contentTypeID, contentID } = this.props.match.params;
 		return <>
 			<TopMenu mode={Mode.Content} />
-			<div style={styles.layout}>
+			<div className="layout">
 				<div className="left-menu">
-					{contentTypes &&
-						contentTypes.map((contentType: IContentType, i: Number) => {
-							const selected = contentType.id === this.contentTypeID;
+					{menuItems &&
+						menuItems.map((contentType: IContentType, i: Number) => {
+							const selected = contentType.id === Number(contentTypeID);
 							return <div key={`contentType${i}`} className={selected ? "menu-item menu-item-selected" : "menu-item"}>
 								<a href={`/komandir/content/${contentType.id}`}>{contentType.name}</a>
 							</div>
 						})}
 				</div>
-				<div>{(isNaN(this.contentTypeID) && "Not selected") || <Button
+				{!contentTypeID && <div>Not selected</div>}
+				{contentTypeID && !contentID && <div><Button
 					variant="contained"
 					color="primary"
-					href="/komandir/contentTypes/0"
-				>
+					onClick={() => create(Number(contentTypeID))}>
 					Create
-        </Button>}</div>
+					</Button></div>}
+				{contentTypeID && contentID &&
+					<div>Properties
+				</div>}
 			</div>
 		</>
 	}
@@ -51,11 +47,14 @@ class Content extends React.Component<IContentProps> {
 
 const mapStateToProps = (store: any) => store.content;
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-	readList: () =>
-		dispatch({
-			type: CONTENT_READ,
-			middleware: middleware.readList
-		})
+	create: (contentTypeID: number) => dispatch({
+		type: CONTENT_CREATE,
+		middleware: middleware.create
+	}),
+	readList: () => dispatch({
+		type: CONTENT_READ,
+		middleware: middleware.readList
+	})
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Content);

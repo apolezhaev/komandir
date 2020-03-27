@@ -39,15 +39,12 @@ import TopMenu from "./TopMenu";
 import { Popup } from "./Popup";
 
 class ContentType extends React.Component<IContentTypeProps> {
-  contentTypeID: number;
-  constructor(props: IContentTypeProps) {
-    super(props);
-    this.contentTypeID = Number(props.match.params.ID);
-  }
   componentDidMount() {
-    this.props.read(this.contentTypeID);
+    const { contentTypeID } = this.props.match.params;
+    this.props.read(Number(contentTypeID));
   }
   render() {
+    const { contentTypeID } = this.props.match.params;
     const {
       current,
       fields,
@@ -89,14 +86,14 @@ class ContentType extends React.Component<IContentTypeProps> {
           <Button href="/komandir/contentTypes">Cancel</Button>
         </Form>
 
-        {this.contentTypeID > 0 && (
+        {contentTypeID && (
           <div>
             <br />
             <br />
             <Button
               variant="contained"
               color="primary"
-              onClick={() => newField(this.contentTypeID)}
+              onClick={() => newField(Number(contentTypeID))}
             >
               New Field
             </Button>
