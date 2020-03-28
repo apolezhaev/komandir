@@ -5,21 +5,28 @@ import middleware from "../middleware/contentMiddleware";
 import { IContentProps, Section, IContentType } from "../interfaces";
 import TopMenu from "./TopMenu";
 import {
-  CONTENT_READ,
+  CONTENT_LOAD,
   CONTENT_CREATE,
   CONTENT_ADD,
   CONTENT_CHANGE
 } from "../actions";
-import { Button } from "@material-ui/core";
+import Table from "@material-ui/core/Table";
+import TableBody from "@material-ui/core/TableBody";
+import TableCell from "@material-ui/core/TableCell";
+import TableHead from "@material-ui/core/TableHead";
+import TableRow from "@material-ui/core/TableRow";
+import { Button, Link } from "@material-ui/core";
 import { TextboxFor } from "./HtmlHelpers";
 
 class Content extends React.Component<IContentProps> {
   componentDidMount() {
-    this.props.readList();
+    const { contentTypeID } = this.props.match.params;
+    this.props.load(Number(contentTypeID));
   }
   render() {
     const {
       menuItems,
+      items,
       add,
       create,
       update,
@@ -61,6 +68,33 @@ class Content extends React.Component<IContentProps> {
               >
                 Create
               </Button>
+              <Table size="small">
+                <TableHead>
+                  <TableRow>
+                    <TableCell>Name</TableCell>
+                    <TableCell>Description</TableCell>
+                    <TableCell></TableCell>
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {items &&
+                    items.map((item: any, i: Number) => {
+                      return (
+                        <TableRow key={`contentType${i}`}>
+                          <TableCell>
+                            <Link href={`/komandir/contentTypes/${item.id}`}>
+                              {item.properties}
+                            </Link>
+                          </TableCell>
+                          <TableCell>{item.url}</TableCell>
+                          <TableCell align="right">
+                            <Button onClick={() => prompt("")}>del</Button>
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                </TableBody>
+              </Table>
             </div>
           )}
           {contentTypeID && content && (
@@ -71,6 +105,14 @@ class Content extends React.Component<IContentProps> {
                   description="Name"
                   onChange={onChange}
                   value={content && content.name}
+                />
+              </div>
+              <div>
+                <TextboxFor
+                  name="url"
+                  description="Url"
+                  onChange={onChange}
+                  value={content && content.url}
                 />
               </div>
               <Button
@@ -107,10 +149,11 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
   onChange: (name: string, value: any) => {
     dispatch({ type: CONTENT_CHANGE, payload: { name, value } });
   },
-  readList: () =>
+  load: (contentTypeID: number) =>
     dispatch({
-      type: CONTENT_READ,
-      middleware: middleware.readList
+      type: CONTENT_LOAD,
+      payload: { contentTypeID },
+      middleware: middleware.load
     })
 });
 

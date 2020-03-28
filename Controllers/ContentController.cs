@@ -28,6 +28,15 @@ namespace Komandir.Controllers
             return await _context.Content.ToListAsync();
         }
 
+        // GET: api/Content/ContentType/5
+        [HttpGet("ContentType/{id}")]
+        public async Task<ActionResult<IEnumerable<Content>>> GetContentByContentType(int id)
+        {
+            return await _context.Content
+                .Where(x => x.ContentTypeID == id)
+                .ToListAsync();
+        }
+
         // GET: api/Content/5
         [HttpGet("{id}")]
         public async Task<ActionResult<Content>> GetContent(int id)

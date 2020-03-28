@@ -1,5 +1,4 @@
 import { IAction, IMiddleware } from "../interfaces";
-import contentTypes from "../middleware/contentTypeMiddleware";
 import { CONTENT_ERROR } from "../actions";
 
 class ContentMiddleware implements IMiddleware {
@@ -30,8 +29,33 @@ class ContentMiddleware implements IMiddleware {
         next({ type: CONTENT_ERROR, payload: error });
       });
   }
-  readList(action: IAction, next: any) {
-    contentTypes.readList(action, next);
+  load(action: IAction, next: any) {
+    fetch("http://localhost:5000/api/ContentTypes")
+      .then(response => response.json())
+      .then(response => {
+        const { contentTypeID } = action.payload;
+        action.payload = { menuItems: response };
+        if (!isNaN(contentTypeID)) {
+          fetch(
+            `http://localhost:5000/api/Content/ContentType/${contentTypeID}`
+          )
+            .then(response => {
+              return response.json();
+            })
+            .then(response => {
+              action.payload = { ...action.payload, items: response };
+              next(action);
+            })
+            .catch(error => {
+              next({ type: CONTENT_ERROR, payload: error });
+            });
+        } else {
+          next(action);
+        }
+      })
+      .catch(error => {
+        next({ type: CONTENT_ERROR, payload: error });
+      });
   }
 }
 

@@ -15,7 +15,9 @@ class ContentTypeMiddleware implements IMiddleware {
         return response.json();
       })
       .then(response => {
-        action.payload = response;
+        action.payload = action.payload
+          ? { ...action.payload, response }
+          : response;
         next(action);
       })
       .catch(error =>
