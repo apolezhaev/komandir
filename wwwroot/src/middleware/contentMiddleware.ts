@@ -5,16 +5,16 @@ import { CONTENT_ERROR } from "../actions";
 class ContentMiddleware implements IMiddleware {
   create(action: IAction, next: any) {
     const { content, contentTypeID } = action.payload;
-    fetch(
-      content.id > 0
-        ? `http://localhost:5000/api/Content/${content.id}`
-        : "http://localhost:5000/api/Content",
-      {
-        method: content.id > 0 ? "PUT" : "POST",
-        body: JSON.stringify(content),
-        headers: { "Content-Type": "application/json" }
-      }
-    )
+    const body = {
+      properties: JSON.stringify({ ...content }),
+      contentTypeID,
+      url: "/some-url"
+    };
+    fetch("http://localhost:5000/api/Content", {
+      method: "POST",
+      body: JSON.stringify(body),
+      headers: { "Content-Type": "application/json" }
+    })
       .then(response => {
         if (!response.ok) {
           throw new Error("Error saving content.");

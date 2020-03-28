@@ -112,6 +112,7 @@ export interface IPopupProps {
 
 export interface IContentState extends IComponentState {
   menuItems: Array<IContentType>;
+  content?: any;
 }
 
 export interface IContentParams {
@@ -123,7 +124,10 @@ export interface IContentProps
   extends IContentState,
     RouteComponentProps<IContentParams> {
   readList(): void;
-  create(contentTypeID: number): void;
+  add(contentTypeID: number): void;
+  create(contentTypeID: number, content: any): void;
+  update(): void;
+  onChange(): void;
 }
 
 export enum Section {
