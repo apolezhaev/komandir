@@ -7,6 +7,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Komandir.Data;
 using Komandir.Models;
+using Komandir.Extensions;
+using Newtonsoft.Json;
 
 namespace Komandir.Controllers
 {
@@ -39,16 +41,34 @@ namespace Komandir.Controllers
 
         // GET: api/Content/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Content>> GetContent(int id)
+        public async Task<ActionResult> GetContent(int id)
         {
             var content = await _context.Content.FindAsync(id);
+            if (content == null)            
+                return NotFound();         
 
-            if (content == null)
+            var contentTypeID = content.ContentTypeID;
+            var contentType = await _context.ContentTypes
+                .Include(x => x.Fields)                
+                .FirstOrDefaultAsync(x => x.ID == contentTypeID);
+           
+            var values = (content.Properties != null 
+                ? JsonConvert.DeserializeObject<List<FieldValue>>(content.Properties) 
+                : new List<FieldValue>()).ToDictionary(x => x.Field, y => y);
+
+            var result = contentType.Fields.Select(x => new 
             {
-                return NotFound();
-            }
-
-            return content;
+                x.ID,
+                x.Name,
+                x.DisplayName,
+                x.Description,
+                x.Regex,
+                x.Required,
+                x.DataTypeID,
+                Value = values.ContainsKey(x.ID) ? values[x.ID].Value : null
+            }).ToArray();
+           
+            return this.Json(result);
         }
 
         // PUT: api/Content/5

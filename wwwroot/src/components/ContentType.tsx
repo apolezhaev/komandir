@@ -101,6 +101,7 @@ class ContentType extends React.Component<IContentTypeProps> {
               <TableHead>
                 <TableRow>
                   <TableCell>Name</TableCell>
+                  <TableCell>Display Name</TableCell>
                   <TableCell>Data Type</TableCell>
                   <TableCell></TableCell>
                 </TableRow>
@@ -114,6 +115,9 @@ class ContentType extends React.Component<IContentTypeProps> {
                         <Link onClick={() => editField(field)}>
                           {field.name}
                         </Link>
+                      </TableCell>
+                      <TableCell>
+                        {field.displayName}
                       </TableCell>
                       <TableCell>
                         {field.dataTypeID && DataType[field.dataTypeID]}
