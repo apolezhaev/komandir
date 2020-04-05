@@ -17,7 +17,7 @@ import TableCell from "@material-ui/core/TableCell";
 import TableHead from "@material-ui/core/TableHead";
 import TableRow from "@material-ui/core/TableRow";
 import { Button, Link } from "@material-ui/core";
-import { TextboxFor, EditorFor } from "./HtmlHelpers";
+import { EditorFor } from "./HtmlHelpers";
 
 class Content extends React.Component<IContentProps> {
   componentDidMount() {
