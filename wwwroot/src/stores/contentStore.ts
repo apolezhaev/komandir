@@ -4,42 +4,53 @@ import {
   CONTENT_CREATE,
   CONTENT_ERROR,
   CONTENT_ADD,
-  CONTENT_CHANGE
+  CONTENT_CHANGE,
+  CONTENT_EDIT,
 } from "../actions";
 
 const INITIAL_STATE: IContentState = {
   menuItems: [],
-  items: []
+  items: [],
 };
 
 const reducers: { [action: string]: IReducer } = {
+  [CONTENT_EDIT]: (state: any, action: IAction) => {
+    const { menuItems, items, error } = state;
+    const { item } = action.payload;
+    return {
+      menuItems: [...menuItems],
+      items: [...items],
+      item,
+      error,
+    };
+  },
   [CONTENT_LOAD]: (state: any, action: IAction) => {
-    const { error, content } = state;
+    const { error, item } = state;
     const { menuItems, items } = action.payload;
     return {
       menuItems,
       items,
-      content,
-      error
+      item,
+      error,
     };
   },
   [CONTENT_ERROR]: (state: any, action: IAction) => {
-    const { menuItems, content, items } = state;
+    const { menuItems, item, items } = state;
     return {
       menuItems: [...menuItems],
       items: [...items],
-      content,
-      error: action.payload?.message
+      item,
+      error: action.payload?.message,
     };
   },
   [CONTENT_CHANGE]: (state: any, action: IAction) => {
-    const { menuItems, error, content, items } = state;
+    const { menuItems, error, item, items } = state;
     const { name, value } = action.payload;
     return {
       menuItems: [...menuItems],
       items: [...items],
-      content: { ...content, [name]: value },
-      error
+      item: { ...item, [name]: value },
+      error,
     };
   },
   [CONTENT_ADD]: (state: any, action: IAction) => {
@@ -47,19 +58,19 @@ const reducers: { [action: string]: IReducer } = {
     return {
       menuItems: [...menuItems],
       items: [...items],
-      content: {},
-      error
+      item: {},
+      error,
     };
   },
   [CONTENT_CREATE]: (state: any, action: IAction) => {
-    const { menuItems, error, content, items } = state;
+    const { menuItems, error, item, items } = state;
     return {
       menuItems: [...menuItems, ...action.payload],
       items: [...items],
-      content,
-      error
+      item,
+      error,
     };
-  }
+  },
 };
 
 export function createContentStore(

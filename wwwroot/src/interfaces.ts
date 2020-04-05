@@ -45,7 +45,7 @@ export enum DataType {
   Lookup = 5,
   Number = 6,
   Text = 7,
-  Boolean = 8
+  Boolean = 8,
 }
 
 export interface IFieldProps {
@@ -75,8 +75,6 @@ export interface IContentTypeParams {
 
 export interface IMiddleware {}
 
-export interface IContentProps {}
-
 export interface IContentTypeProps
   extends IContentTypeState,
     RouteComponentProps<IContentTypeParams> {
@@ -98,7 +96,7 @@ export interface IContentTypeState extends IComponentState {
 
 export enum PopupResult {
   OK = 1,
-  Cancel = 2
+  Cancel = 2,
 }
 
 export interface IPopupProps {
@@ -113,7 +111,7 @@ export interface IPopupProps {
 export interface IContentState extends IComponentState {
   menuItems: Array<IContentType>;
   items: Array<any>;
-  content?: any;
+  item?: any;
 }
 
 export interface IContentParams {
@@ -129,11 +127,12 @@ export interface IContentProps
   create(contentTypeID: number, content: any): void;
   update(): void;
   onChange(): void;
+  edit(contentID: number): void;
 }
 
 export enum Section {
   ContentTypes = 1,
-  Content = 2
+  Content = 2,
 }
 
 export interface ITopMenuProps {

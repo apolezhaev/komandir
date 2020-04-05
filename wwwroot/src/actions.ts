@@ -21,3 +21,4 @@ export const CONTENT_CREATE = "CONTENT_CREATE";
 export const CONTENT_ERROR = "CONTENT_ERROR";
 export const CONTENT_ADD = "CONTENT_ADD";
 export const CONTENT_CHANGE = "CONTENT_CHANGE";
+export const CONTENT_EDIT = "CONTENT_EDIT";

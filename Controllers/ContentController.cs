@@ -56,17 +56,23 @@ namespace Komandir.Controllers
                 ? JsonConvert.DeserializeObject<List<FieldValue>>(content.Properties) 
                 : new List<FieldValue>()).ToDictionary(x => x.Field, y => y);
 
-            var result = contentType.Fields.Select(x => new 
+            var result = new
             {
-                x.ID,
-                x.Name,
-                x.DisplayName,
-                x.Description,
-                x.Regex,
-                x.Required,
-                x.DataTypeID,
-                Value = values.ContainsKey(x.ID) ? values[x.ID].Value : null
-            }).ToArray();
+                content.ID,
+                content.Url,
+                content.ContentTypeID,
+                properties = contentType.Fields.Select(x => new
+                {
+                    x.ID,
+                    x.Name,
+                    x.DisplayName,
+                    x.Description,
+                    x.Regex,
+                    x.Required,
+                    x.DataTypeID,
+                    Value = values.ContainsKey(x.ID) ? values[x.ID].Value : null
+                }).ToArray()
+            };          
            
             return this.Json(result);
         }
